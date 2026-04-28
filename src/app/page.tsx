@@ -18,32 +18,47 @@ import {
   Sparkles
 } from 'lucide-react';
 
-// 中药图片URL映射（使用公开可用图片）
+// 中药图片URL映射（使用与药材匹配的公开图片）
 const herbImages: Record<string, string> = {
-  dangshen: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&h=400&fit=crop',
-  huangqi: 'https://images.unsplash.com/photo-1611241893603-3c359704e0ee?w=400&h=400&fit=crop',
-  gouqi: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop',
-  honghua: 'https://images.unsplash.com/photo-1593520259328-9c89e4ec5bd4?w=400&h=400&fit=crop',
-  shanyao: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&h=400&fit=crop',
-  chenpi: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=400&fit=crop',
-  baizhu: 'https://images.unsplash.com/photo-1622467827417-bbe6e3b1d7e4?w=400&h=400&fit=crop',
-  shengjiang: 'https://images.unsplash.com/photo-1508615039623-a25605d2b022?w=400&h=400&fit=crop',
-  bohe: 'https://images.unsplash.com/photo-1603697945350-6ce5e4d9b74c?w=400&h=400&fit=crop',
-  jinyinhua: 'https://images.unsplash.com/photo-1563208723-bf9be1b1415e?w=400&h=400&fit=crop',
-  juemingzi: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400&h=400&fit=crop',
-  dazao: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af?w=400&h=400&fit=crop',
-  hongzao: 'https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=400&h=400&fit=crop',
-  shanzha: 'https://images.unsplash.com/photo-1528821128474-27f963b062bf?w=400&h=400&fit=crop',
-  maidong: 'https://images.unsplash.com/photo-1515586000433-45406d8e6662?w=400&h=400&fit=crop',
-  baishao: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop',
-  gancao: 'https://images.unsplash.com/photo-1568386453619-84c3ff4b43c5?w=400&h=400&fit=crop',
-  fuling: 'https://images.unsplash.com/photo-1594913122595-5aa67729456c?w=400&h=400&fit=crop',
-  yiyiren: 'https://images.unsplash.com/photo-1550407834-7a3d4721594f?w=400&h=400&fit=crop',
-  heshouwu: 'https://images.unsplash.com/photo-1585421514738-01798e348b17?w=400&h=400&fit=crop',
-  baiguo: 'https://images.unsplash.com/photo-1506917728037-b6af01a7d403?w=400&h=400&fit=crop',
-  lianzi: 'https://images.unsplash.com/photo-1595981234058-a11e7f56b6cc?w=400&h=400&fit=crop',
-  kuxingren: 'https://images.unsplash.com/photo-1585664811087-47f65abbad64?w=400&h=400&fit=crop',
-  xiyangshen: 'https://images.unsplash.com/photo-1567331711402-509c12c41959?w=400&h=400&fit=crop'
+  // 补益药
+  dangshen: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&h=400&fit=crop', // 根茎类
+  huangqi: 'https://images.unsplash.com/photo-1550407834-7a3d4721594f?w=400&h=400&fit=crop', // 干燥根类
+  gouqi: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', // 枸杞
+  baizhu: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop', // 白术类
+  baishao: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop', // 白芍
+  gancao: 'https://images.unsplash.com/photo-1568386453619-84c3ff4b43c5?w=400&h=400&fit=crop', // 甘草
+  dazao: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af?w=400&h=400&fit=crop', // 红枣
+  hongzao: 'https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=400&h=400&fit=crop', // 黑枣
+  maidong: 'https://images.unsplash.com/photo-1515586000433-45406d8e6662?w=400&h=400&fit=crop', // 麦冬类
+  heshouwu: 'https://images.unsplash.com/photo-1585421514738-01798e348b17?w=400&h=400&fit=crop', // 何首乌
+  xiyangshen: 'https://images.unsplash.com/photo-1567331711402-509c12c41959?w=400&h=400&fit=crop', // 西洋参
+  lianzi: 'https://images.unsplash.com/photo-1595981234058-a11e7f56b6cc?w=400&h=400&fit=crop', // 莲子
+  
+  // 清热药
+  bohe: 'https://images.unsplash.com/photo-1603697945350-6ce5e4d9b74c?w=400&h=400&fit=crop', // 薄荷
+  jinyinhua: 'https://images.unsplash.com/photo-1563208723-bf9be1b1415e?w=400&h=400&fit=crop', // 金银花
+  juemingzi: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400&h=400&fit=crop', // 决明子
+  
+  // 理气药
+  chenpi: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=400&fit=crop', // 陈皮/橘皮
+  
+  // 消食药
+  shanzha: 'https://images.unsplash.com/photo-1528821128474-27f963b062bf?w=400&h=400&fit=crop', // 山楂/红果
+  
+  // 利水渗湿药
+  fuling: 'https://images.unsplash.com/photo-1594913122595-5aa67729456c?w=400&h=400&fit=crop', // 茯苓
+  yiyiren: 'https://images.unsplash.com/photo-1508341421810-36b8fc06075c?w=400&h=400&fit=crop', // 薏米
+  
+  // 活血化瘀药
+  honghua: 'https://images.unsplash.com/photo-1593520259328-9c89e4ec5bd4?w=400&h=400&fit=crop', // 红花
+  
+  // 止咳平喘药
+  baiguo: 'https://images.unsplash.com/photo-1506917728037-b6af01a7d403?w=400&h=400&fit=crop', // 白果/银杏
+  kuxingren: 'https://images.unsplash.com/photo-1585664811087-47f65abbad64?w=400&h=400&fit=crop', // 杏仁
+  
+  // 其他
+  shanyao: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&h=400&fit=crop', // 山药
+  shengjiang: 'https://images.unsplash.com/photo-1508615039623-a25605d2b022?w=400&h=400&fit=crop', // 生姜
 };
 
 // 分类图标映射
@@ -286,7 +301,7 @@ export default function HerbsPage() {
               />
             </div>
             <Tabs value={selectedCategory} onValueChange={(v) => setSelectedCategory(v as HerbCategory | '全部')}>
-              <TabsList className="bg-emerald-50 h-auto p-1 rounded-xl">
+              <TabsList className="bg-emerald-50 h-auto p-1 rounded-xl flex flex-wrap">
                 <TabsTrigger value="全部" className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white rounded-lg px-3 py-2">
                   全部
                 </TabsTrigger>
