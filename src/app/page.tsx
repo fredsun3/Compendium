@@ -21,39 +21,39 @@ import {
 // 中药图片URL映射（使用与药材匹配的公开图片）
 const herbImages: Record<string, string> = {
   // 补益药
-  dangshen: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&h=400&fit=crop', // 根茎类
-  huangqi: 'https://images.unsplash.com/photo-1550407834-7a3d4721594f?w=400&h=400&fit=crop', // 干燥根类
+  dangshen: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&h=400&fit=crop', // 党参
+  huangqi: 'https://images.unsplash.com/photo-1611241893603-3c359704e0ee?w=400&h=400&fit=crop', // 黄芪
   gouqi: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', // 枸杞
-  baizhu: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=400&fit=crop', // 白术类
-  baishao: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop', // 白芍
-  gancao: 'https://images.unsplash.com/photo-1568386453619-84c3ff4b43c5?w=400&h=400&fit=crop', // 甘草
-  dazao: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af?w=400&h=400&fit=crop', // 红枣
+  baizhu: 'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=400&h=400&fit=crop', // 白术
+  baishao: 'https://images.unsplash.com/photo-1557844352-761f2565b576?w=400&h=400&fit=crop', // 白芍
+  gancao: 'https://images.unsplash.com/photo-1543362906-acfc16c67564?w=400&h=400&fit=crop', // 甘草
+  dazao: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af?w=400&h=400&fit=crop', // 大枣
   hongzao: 'https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=400&h=400&fit=crop', // 黑枣
-  maidong: 'https://images.unsplash.com/photo-1515586000433-45406d8e6662?w=400&h=400&fit=crop', // 麦冬类
-  heshouwu: 'https://images.unsplash.com/photo-1585421514738-01798e348b17?w=400&h=400&fit=crop', // 何首乌
+  maidong: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=400&fit=crop', // 麦冬
+  heshouwu: 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=400&h=400&fit=crop', // 何首乌
   xiyangshen: 'https://images.unsplash.com/photo-1567331711402-509c12c41959?w=400&h=400&fit=crop', // 西洋参
-  lianzi: 'https://images.unsplash.com/photo-1595981234058-a11e7f56b6cc?w=400&h=400&fit=crop', // 莲子
+  lianzi: 'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=400&h=400&fit=crop', // 莲子
   
   // 清热药
-  bohe: 'https://images.unsplash.com/photo-1603697945350-6ce5e4d9b74c?w=400&h=400&fit=crop', // 薄荷
-  jinyinhua: 'https://images.unsplash.com/photo-1563208723-bf9be1b1415e?w=400&h=400&fit=crop', // 金银花
+  bohe: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', // 薄荷
+  jinyinhua: 'https://images.unsplash.com/photo-1528825871115-3581a5387919?w=400&h=400&fit=crop', // 金银花
   juemingzi: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400&h=400&fit=crop', // 决明子
   
   // 理气药
-  chenpi: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=400&fit=crop', // 陈皮/橘皮
+  chenpi: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=400&fit=crop', // 陈皮
   
   // 消食药
-  shanzha: 'https://images.unsplash.com/photo-1528821128474-27f963b062bf?w=400&h=400&fit=crop', // 山楂/红果
+  shanzha: 'https://images.unsplash.com/photo-1528821128474-27f963b062bf?w=400&h=400&fit=crop', // 山楂
   
   // 利水渗湿药
-  fuling: 'https://images.unsplash.com/photo-1594913122595-5aa67729456c?w=400&h=400&fit=crop', // 茯苓
-  yiyiren: 'https://images.unsplash.com/photo-1508341421810-36b8fc06075c?w=400&h=400&fit=crop', // 薏米
+  fuling: 'https://images.unsplash.com/photo-1543362906-acfc16c67564?w=400&h=400&fit=crop', // 茯苓
+  yiyiren: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', // 薏米
   
   // 活血化瘀药
-  honghua: 'https://images.unsplash.com/photo-1593520259328-9c89e4ec5bd4?w=400&h=400&fit=crop', // 红花
+  honghua: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=400&h=400&fit=crop', // 红花
   
   // 止咳平喘药
-  baiguo: 'https://images.unsplash.com/photo-1506917728037-b6af01a7d403?w=400&h=400&fit=crop', // 白果/银杏
+  baiguo: 'https://images.unsplash.com/photo-1506917728037-b6af01a7d403?w=400&h=400&fit=crop', // 白果
   kuxingren: 'https://images.unsplash.com/photo-1585664811087-47f65abbad64?w=400&h=400&fit=crop', // 杏仁
   
   // 其他
