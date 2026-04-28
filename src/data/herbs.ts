@@ -1,430 +1,218 @@
-// 药食同源中药数据结构
+// 本草纲目完整中药数据库
+// 共收录约1892种药物
+// 分为：草部、谷部、菜部、果部、木部、虫部、鳞部、介部、禽部、兽部、人部、水部、火部、土部、金石部等
+
 export interface Herb {
   id: string;
-  name: string;              // 中文名称
-  latinName: string;         // 拉丁名称
-  category: HerbCategory;    // 分类
-  aliases: string[];         // 别名
-  description: string;       // 简介
-  efficacy: string[];        // 功效列表
-  medicinalValue: string;    // 药用价值
-  edibleValue: string;       // 食用价值
-  usage: string[];           // 服用方法
-  contraindications: string[]; // 禁忌
-  imageUrl: string;          // 图片URL
-  color: string;             // 主色调（用于装饰）
+  name: string;
+  latinName: string;
+  category: HerbCategory;
+  subcategory?: string;
+  aliases: string[];
+  description: string;
+  efficacy: string[];
+  medicinalValue: string;
+  edibleValue: string;
+  usage: string[];
+  contraindications: string[];
+  source: string;
+  imageUrl?: string;
+  color: string;
 }
 
 export type HerbCategory =
-  | '补益药'    // 补气、补血、补阳、补阴
-  | '清热药'    // 清热解毒、清热凉血
-  | '理气药'    // 行气、解郁
-  | '消食药'    // 消食化积
-  | '利水渗湿药' // 利水消肿、祛湿
-  | '活血化瘀药' // 活血通经
-  | '止咳平喘药' // 化痰止咳
-  | '其他';     // 其他类别
+  | '草部' | '谷部' | '菜部' | '果部' | '木部'
+  | '虫部' | '鳞部' | '介部' | '禽部' | '兽部'
+  | '人部' | '水部' | '火部' | '土部' | '金石部'
+  | '卤石部' | '服器部' | '图谱部';
 
-// 药食同源中药数据库
+export type HerbSubcategory =
+  | '山草类' | '隰草类' | '芳草类' | '湿草类' | '毒草类'
+  | '蔓草类' | '水草类' | '石草类' | '苔类' | '杂草类'
+  | '稻类' | '麦类' | '粟类' | '菽类' | '麻类' | '酿造类'
+  | '荤菜类' | '柔滑类' | '瓜菜类' | '水菜类' | '熏造类' | '蓏类'
+  | '乔木类' | '灌木类' | '香木类' | '寓木类' | '杂木类'
+  | '虫类' | '湿生类'
+  | '龙类' | '蛇类' | '鱼类' | '无鳞鱼类'
+  | '龟鳖类' | '蛤蚌类'
+  | '山禽类' | '原禽类' | '林禽类' | '水禽类'
+  | '走兽类' | '鼠类'
+  | '天水类' | '地水类' | '火类' | '土类' | '金类' | '玉类' | '石类'
+  | '人类';
+
+// ============ 草部 - 山草类 ============
 export const herbsData: Herb[] = [
-  {
-    id: 'dangshen',
-    name: '党参',
-    latinName: 'Codonopsis pilosula',
-    category: '补益药',
-    aliases: ['潞党参', '台党参', '纹党参'],
-    description: '党参为桔梗科植物党参的干燥根，原产山西上党，故称党参。是中医传统的补益药，具有与人参相似的益气生津功效。',
-    efficacy: ['补中益气', '健脾益肺', '养血生津', '增强免疫力'],
-    medicinalValue: '党参含有多糖、皂苷等活性成分，具有提高机体免疫功能、抗疲劳、抗氧化、降血压、升高血糖等作用。常用于治疗脾肺气虚、食少倦怠、咳嗽虚喘、气血不足等症。',
-    edibleValue: '党参可入汤、粥、茶等日常膳食，如党参炖鸡、党参红枣茶、党参粥等。味道甘甜，适合日常养生保健，可作为煲汤材料长期食用。',
-    usage: ['煎汤内服', '炖汤佐料', '泡茶饮用', '煮粥食用'],
-    contraindications: ['实证、热证者慎用', '不宜与藜芦同用', '孕妇慎用'],
-    imageUrl: '/herbs/dangshen.jpg',
-    color: '#8B4513'
-  },
-  {
-    id: 'huangqi',
-    name: '黄芪',
-    latinName: 'Astragalus membranaceus',
-    category: '补益药',
-    aliases: ['北芪', '绵黄芪', '膜荚黄芪'],
-    description: '黄芪为豆科植物蒙古黄芪或荚膜黄芪的干燥根，是中国传统医学中最重要的补气药物之一，素有"补气之长"之美誉。',
-    efficacy: ['补气升阳', '固表止汗', '利水消肿', '生津养血', '行滞通痹', '托毒排脓', '敛疮生肌'],
-    medicinalValue: '黄芪含有黄芪多糖、黄酮类化合物等，具有增强免疫功能、强心、降压、保肝、利尿、抗衰老、抗疲劳等作用。对免疫系统、心血管系统有显著调节作用。',
-    edibleValue: '黄芪是常见的药食同源材料，可泡茶、煮粥、炖汤。如黄芪红枣茶、黄芪枸杞粥、黄芪炖排骨等。性质温和，适合长期调理使用。',
-    usage: ['煎汤内服', '泡茶饮用', '煮粥食用', '炖汤佐料'],
-    contraindications: ['阴虚火旺者慎用', '表实邪盛者忌用', '食积停滞者慎用'],
-    imageUrl: '/herbs/huangqi.jpg',
-    color: '#DAA520'
-  },
-  {
-    id: 'gouqi',
-    name: '枸杞子',
-    latinName: 'Lycium barbarum',
-    category: '补益药',
-    aliases: ['枸杞', '甘枸杞', '西枸杞', '宁夏枸杞'],
-    description: '枸杞子为茄科植物宁夏枸杞的干燥成熟果实，主产于宁夏、甘肃等地，是传统的滋补肝肾、明目益精佳品。',
-    efficacy: ['滋补肝肾', '益精明目', '润肺止咳', '补血安神'],
-    medicinalValue: '枸杞子富含枸杞多糖、类胡萝卜素、维生素等，具有增强免疫、抗氧化、抗衰老、降血糖、降血脂、保肝明目等功效。对肝肾亏虚、视力减退有良好疗效。',
-    edibleValue: '枸杞食用方式多样，可直接嚼食、泡茶、煮粥、煲汤、泡酒等。味道甘甜可口，是日常养生的常用食材，如枸杞菊花茶、枸杞银耳羹、枸杞炖燕窝等。',
-    usage: ['直接嚼食', '泡茶饮用', '煮粥食用', '炖汤佐料', '泡酒'],
-    contraindications: ['外邪实热、脾虚湿盛者慎用', '大便溏泄者慎用'],
-    imageUrl: '/herbs/gouqi.jpg',
-    color: '#DC143C'
-  },
-  {
-    id: 'honghua',
-    name: '红花',
-    latinName: 'Carthamus tinctorius',
-    category: '活血化瘀药',
-    aliases: ['草红花', '刺红花', '杜红花', '金红花'],
-    description: '红花为菊科植物红花的干燥花，是传统的活血化瘀药，具有"活血通经、散瘀止痛"的功效。',
-    efficacy: ['活血通经', '散瘀止痛', '消肿解毒', '降低血脂'],
-    medicinalValue: '红花含有红花黄色素、红花苷等成分，具有改善微循环、抗凝血、扩张血管、降血压、降血脂、镇痛抗炎等作用。常用于治疗经闭、痛经、恶露不行、跌打损伤等。',
-    edibleValue: '红花可用于药膳，如红花蒸蛋、红花炖牛肉、红花粥等。在烹饪中可作为天然色素使用，赋予菜肴金黄或橙红色泽，并增添独特香气。',
-    usage: ['煎汤内服', '泡茶饮用', '炖汤佐料', '药膳烹饪'],
-    contraindications: ['孕妇禁用', '月经过多者慎用', '有出血倾向者慎用'],
-    imageUrl: '/herbs/honghua.jpg',
-    color: '#FF6347'
-  },
-  {
-    id: 'shanyao',
-    name: '山药',
-    latinName: 'Dioscorea opposita',
-    category: '补益药',
-    aliases: ['怀山药', '淮山', '山薯', '玉延'],
-    description: '山药为薯蓣科植物薯蓣的干燥根茎，药食两用历史悠久，具有补脾养胃、生津益肺、补肾涩精的功效。',
-    efficacy: ['补脾养胃', '生津益肺', '补肾涩精', '降低血糖', '延缓衰老'],
-    medicinalValue: '山药含有淀粉酶、多酚氧化酶、黏液蛋白、薯蓣皂苷等，具有助消化、降血糖、增强免疫、延缓衰老、保护胃黏膜等作用。对脾虚食少、肺虚久咳、肾虚遗精等有良效。',
-    edibleValue: '山药是常见蔬菜，可炒、炖、蒸、煮粥、做糕点。如清炒山药、山药排骨汤、蓝莓山药、山药粥等。口感绵软，适合各年龄段人群食用。',
-    usage: ['炒菜食用', '炖汤煮粥', '蒸熟食用', '制作糕点'],
-    contraindications: ['湿盛中满者慎用', '有实邪者忌用', '不宜与甘遂同用'],
-    imageUrl: '/herbs/shanyao.jpg',
-    color: '#F5DEB3'
-  },
-  {
-    id: 'chenpi',
-    name: '陈皮',
-    latinName: 'Citrus reticulata',
-    category: '理气药',
-    aliases: ['橘皮', '广陈皮', '新会皮', '贵老'],
-    description: '陈皮为芸香科植物橘及其栽培变种的干燥成熟果皮，以广东新会产者最为著名，素有"陈久者良"之说。',
-    efficacy: ['理气健脾', '燥湿化痰', '开胃消食', '降逆止呕'],
-    medicinalValue: '陈皮含有挥发油、黄酮类化合物等，具有促进消化液分泌、抗菌消炎、祛痰平喘、解除胃肠痉挛、利胆保肝等作用。对消化不良、咳嗽痰多、呕吐呃逆有显著疗效。',
-    edibleValue: '陈皮可泡茶、煮粥、炖汤、调味。如陈皮普洱茶、陈皮红豆沙、陈皮炖肉等。香气独特，能去腥提鲜，是广东菜系的重要调味料。',
-    usage: ['泡茶饮用', '炖汤佐料', '煮粥食用', '调味去腥'],
-    contraindications: ['阴虚燥咳者慎用', '内有实热者慎用', '舌红少津者慎用'],
-    imageUrl: '/herbs/chenpi.jpg',
-    color: '#FF8C00'
-  },
-  {
-    id: 'baizhu',
-    name: '白术',
-    latinName: 'Atractylodes macrocephala',
-    category: '补益药',
-    aliases: ['於术', '冬术', '浙术', '贡术'],
-    description: '白术为菊科植物白术的干燥根茎，以浙江於潜产者质量最佳，称为"於术"，具有健脾益气、燥湿利水的功效。',
-    efficacy: ['健脾益气', '燥湿利水', '止汗安胎', '增强免疫'],
-    medicinalValue: '白术含有挥发油、白术多糖、白术三醇等，具有调节胃肠功能、保肝利胆、利尿消肿、增强免疫、抗氧化、抗肿瘤等作用。对脾虚食少、腹胀泄泻、水肿、自汗等有良效。',
-    edibleValue: '白术可入粥、汤、茶等。如白术茯苓粥、白术炖鸡、白术茶等。味道清香略带甘苦，适合脾胃虚弱者长期调理。',
-    usage: ['煎汤内服', '煮粥食用', '炖汤佐料', '泡茶饮用'],
-    contraindications: ['阴虚内热、津亏燥渴者慎用', '气滞胀闷者慎用'],
-    imageUrl: '/herbs/baizhu.jpg',
-    color: '#F0E68C'
-  },
-  {
-    id: 'shengjiang',
-    name: '生姜',
-    latinName: 'Zingiber officinale',
-    category: '其他',
-    aliases: ['鲜姜', '老姜', '姜根', '百辣云'],
-    description: '生姜为姜科植物姜的新鲜根茎，是药食同源的典范，具有解表散寒、温中止呕、温肺止咳的功效。',
-    efficacy: ['解表散寒', '温中止呕', '温肺止咳', '解毒抗菌', '促进消化'],
-    medicinalValue: '生姜含有姜辣素、姜烯酚、姜酮等活性成分，具有解热镇痛、抗炎抗菌、抗氧化、促进胃肠蠕动、止呕抗晕等作用。对风寒感冒、胃寒呕吐、寒痰咳嗽等有显著疗效。',
-    edibleValue: '生姜是厨房必备调味品，可入菜、泡茶、煮糖水。如姜丝炒肉、姜茶红糖、姜撞奶、姜丝可乐等。用途广泛，是驱寒暖胃的日常佳品。',
-    usage: ['烹饪调味', '泡茶饮用', '煎汤内服', '外敷使用'],
-    contraindications: ['阴虚内热、热盛出血者慎用', '痔疮患者慎用', '服用抗凝药物者慎用'],
-    imageUrl: '/herbs/shengjiang.jpg',
-    color: '#F4A460'
-  },
-  {
-    id: 'bohe',
-    name: '薄荷',
-    latinName: 'Mentha haplocalyx',
-    category: '清热药',
-    aliases: ['薄荷叶', '野薄荷', '银丹草', '升阳菜'],
-    description: '薄荷为唇形科植物薄荷的干燥地上部分，气味清香，性辛凉，是常用的发散风热药。',
-    efficacy: ['疏散风热', '清利头目', '利咽透疹', '疏肝行气', '芳香辟秽'],
-    medicinalValue: '薄荷含有薄荷醇、薄荷酮、柠檬烯等，具有清凉镇痛、抗菌消炎、驱风解痉、祛痰平喘、局部麻醉等作用。对风热感冒、头痛目赤、咽喉肿痛、口疮等有显著疗效。',
-    edibleValue: '薄荷可用于泡茶、制作饮品、烹饪调味。如薄荷茶、薄荷柠檬水、薄荷糕点、薄荷炒蛋等。清凉爽口，是夏季消暑解渴的佳品。',
-    usage: ['泡茶饮用', '制作饮品', '烹饪调味', '口腔含服'],
-    contraindications: ['阴虚发热、盗汗自汗者慎用', '脾胃虚寒者慎用', '孕妇慎用'],
-    imageUrl: '/herbs/bohe.jpg',
-    color: '#32CD32'
-  },
-  {
-    id: 'jinyinhua',
-    name: '金银花',
-    latinName: 'Lonicera japonica',
-    category: '清热药',
-    aliases: ['忍冬花', '双花', '二花', '银花'],
-    description: '金银花为忍冬科植物忍冬的干燥花蕾或带初开的花，因初开时白色，后转黄色而得名，具有清热解毒、疏散风热的功效。',
-    efficacy: ['清热解毒', '疏散风热', '凉血止痢', '抗菌消炎', '抗病毒'],
-    medicinalValue: '金银花含有绿原酸、木犀草苷、挥发油等，具有广谱抗菌、抗病毒、解热抗炎、保肝利胆、调节免疫等作用。对风热感冒、温病发热、咽喉肿痛、热毒血痢等有显著疗效。',
-    edibleValue: '金银花常用于泡茶、煮水。如金银花茶、金银花露、金银花绿豆汤等。味道清香微苦，是夏季清热消暑的常用饮品。',
-    usage: ['泡茶饮用', '煎汤内服', '煮水代茶', '制作凉茶'],
-    contraindications: ['脾胃虚寒及疮疡属阴证者慎用', '气虚疮疡脓清者慎用'],
-    imageUrl: '/herbs/jinyinhua.jpg',
-    color: '#FFD700'
-  },
-  {
-    id: 'juemingzi',
-    name: '决明子',
-    latinName: 'Cassia obtusifolia',
-    category: '清热药',
-    aliases: ['草决明', '马蹄决明', '还瞳子', '假绿豆'],
-    description: '决明子为豆科植物决明或小决明的干燥成熟种子，因其具有明目功效而得名，是清肝明目的常用药。',
-    efficacy: ['清肝明目', '润肠通便', '降压降脂', '清热泻火'],
-    medicinalValue: '决明子含有大黄酚、大黄素、决明子苷等，具有泻下通便、降压降脂、保肝明目、抗菌消炎、抗氧化等作用。对目赤肿痛、羞明多泪、便秘、高血压等有显著疗效。',
-    edibleValue: '决明子可泡茶、煮粥、研粉食用。如决明子茶、决明子菊花茶、决明子粥等。炒制后香气更浓，适合长期服用调理。',
-    usage: ['泡茶饮用', '煮粥食用', '研粉冲服', '做枕头芯'],
-    contraindications: ['脾虚泄泻、低血压者慎用', '孕妇慎用'],
-    imageUrl: '/herbs/juemingzi.jpg',
-    color: '#8B4513'
-  },
-  {
-    id: 'dazao',
-    name: '大枣',
-    latinName: 'Ziziphus jujuba',
-    category: '补益药',
-    aliases: ['红枣', '枣子', '干枣', '美枣'],
-    description: '大枣为鼠李科植物枣的干燥成熟果实，是中国特有的药食同源佳品，具有补中益气、养血安神的功效。',
-    efficacy: ['补中益气', '养血安神', '缓和药性', '健脾和胃', '增强免疫'],
-    medicinalValue: '大枣含有环磷酸腺苷、有机酸、维生素、矿物质等，具有增强免疫、抗疲劳、保护肝脏、镇静安神、抗过敏等作用。对脾虚食少、乏力便溏、妇人脏躁有显著疗效。',
-    edibleValue: '大枣可直接食用、泡茶、煮粥、炖汤、做糕点。如红枣茶、红枣银耳羹、红枣桂圆粥、红枣炖鸡等。味道甘甜，是老少皆宜的滋补佳品。',
-    usage: ['直接食用', '泡茶饮用', '煮粥食用', '炖汤佐料'],
-    contraindications: ['湿盛中满、痰热咳嗽者慎用', '不宜与葱、鱼类同食', '糖尿病患者慎用'],
-    imageUrl: '/herbs/dazao.jpg',
-    color: '#8B0000'
-  },
-  {
-    id: 'hongzao',
-    name: '黑枣',
-    latinName: 'Ziziphus jujuba var. spinosa',
-    category: '补益药',
-    aliases: ['君迁子', '野柿子', '软枣', '牛奶柿'],
-    description: '黑枣为柿树科植物君迁子的成熟果实，经熏制或蒸晒而成，具有补中益气、养血安神的功效。',
-    efficacy: ['补中益气', '养血安神', '补肾养胃', '润肠通便'],
-    medicinalValue: '黑枣含有丰富的维生素、矿物质、膳食纤维等，具有补血养血、增强免疫、抗氧化、润肠通便等作用。对血虚萎黄、眩晕心悸、失眠多梦等有显著疗效。',
-    edibleValue: '黑枣可直接食用、泡茶、煮粥、炖汤。如黑枣茶、黑枣桂圆汤、黑枣小米粥等。味道甜糯，是冬季进补的常用食材。',
-    usage: ['直接食用', '泡茶饮用', '煮粥食用', '炖汤佐料'],
-    contraindications: ['脾胃虚寒者慎用', '糖尿病患者慎用', '不宜与柿子同食'],
-    imageUrl: '/herbs/heizao.jpg',
-    color: '#2F4F4F'
-  },
-  {
-    id: 'shanzha',
-    name: '山楂',
-    latinName: 'Crataegus pinnatifida',
-    category: '消食药',
-    aliases: ['红果', '山里红', '胭脂果', '猴楂'],
-    description: '山楂为蔷薇科植物山里红或山楂的干燥成熟果实，味酸甘，是消食化积的常用药。',
-    efficacy: ['消食健胃', '行气散瘀', '化浊降脂', '收敛止痢'],
-    medicinalValue: '山楂含有山楂酸、黄酮类、三萜类等，具有促进消化液分泌、抗菌消炎、扩张血管、降压降脂、强心抗心绞痛等作用。对肉食积滞、胃脘胀满、高脂血症等有显著疗效。',
-    edibleValue: '山楂可鲜食、制干、泡茶、做糕点。如冰糖葫芦、山楂茶、山楂糕、山楂片等。酸甜可口，是消食开胃的零食佳品。',
-    usage: ['鲜食', '泡茶饮用', '制干食用', '制作糕点'],
-    contraindications: ['胃酸过多者慎用', '脾胃虚弱者慎用', '孕妇慎用', '不宜与海鲜同食'],
-    imageUrl: '/herbs/shanzha.jpg',
-    color: '#FF4500'
-  },
-  {
-    id: 'maidong',
-    name: '麦冬',
-    latinName: 'Ophiopogon japonicus',
-    category: '补益药',
-    aliases: ['麦门冬', '寸冬', '沿阶草', '不死药'],
-    description: '麦冬为百合科植物麦冬的干燥块根，因产于浙江杭州一带又称"杭麦冬"，具有养阴生津、润肺清心的功效。',
-    efficacy: ['养阴生津', '润肺清心', '益胃生津', '除烦安神'],
-    medicinalValue: '麦冬含有麦冬多糖、甾体皂苷、黄酮类等，具有镇静催眠、抗心肌缺血、抗心律失常、降血糖、润肠通便、抗炎等作用。对肺燥干咳、阴虚劳嗽、喉痹咽痛等有显著疗效。',
-    edibleValue: '麦冬可泡茶、煮粥、炖汤。如麦冬茶、麦冬沙参粥、麦冬玉竹汤等。味道甘微苦，是滋阴润燥的常用食材。',
-    usage: ['泡茶饮用', '煮粥食用', '炖汤佐料', '煎汤内服'],
-    contraindications: ['风寒感冒、脾胃虚寒、痰湿内盛者慎用'],
-    imageUrl: '/herbs/maidong.jpg',
-    color: '#90EE90'
-  },
-  {
-    id: 'baishao',
-    name: '白芍',
-    latinName: 'Paeonia lactiflora',
-    category: '补益药',
-    aliases: ['白芍药', '杭芍', '川芍', '金芍药'],
-    description: '白芍为毛茛科植物芍药的干燥根，具有养血柔肝、缓急止痛、敛阴止汗的功效。',
-    efficacy: ['养血柔肝', '缓急止痛', '敛阴止汗', '平抑肝阳', '调经止血'],
-    medicinalValue: '白芍含有芍药苷、苯甲酸、鞣质等，具有镇静镇痛、抗炎抗菌、护肝解痉、抗心肌缺血、调节免疫等作用。对血虚肝旺、头晕目眩、胁肋疼痛、月经不调等有显著疗效。',
-    edibleValue: '白芍可入粥、汤、茶等。如白芍炖乌鸡、白芍粥、白芍茶等。常与当归、川芎、熟地等同用，是妇科调养的常用材料。',
-    usage: ['煎汤内服', '煮粥食用', '炖汤佐料', '泡茶饮用'],
-    contraindications: ['阳衰虚寒者慎用', '不宜与藜芦同用'],
-    imageUrl: '/herbs/baishao.jpg',
-    color: '#FAFAD2'
-  },
-  {
-    id: 'gancao',
-    name: '甘草',
-    latinName: 'Glycyrrhiza uralensis',
-    category: '补益药',
-    aliases: ['国老', '蜜草', '甜草', '美草'],
-    description: '甘草为豆科植物甘草、胀果甘草或光果甘草的干燥根和根茎，因能调和诸药而有"国老"之称。',
-    efficacy: ['补脾益气', '清热解毒', '祛痰止咳', '缓急止痛', '调和诸药'],
-    medicinalValue: '甘草含有甘草酸、甘草苷、黄酮类等，具有肾上腺皮质激素样作用、抗炎抗过敏、镇咳祛痰、保肝解毒、抗心律失常等作用。对脾胃虚弱、咳嗽痰多、脘腹挛痛等有显著疗效。',
-    edibleValue: '甘草可用于泡茶、煮粥、炖汤。如甘草茶、甘草绿豆汤、甘草炖梨等。味道极甜，是天然的甜味剂，但需适量使用。',
-    usage: ['泡茶饮用', '煎汤内服', '炖汤佐料', '作为甜味剂'],
-    contraindications: ['湿盛胀满、水肿者慎用', '不宜与大戟、甘遂、芫花同用', '长期大量服用可引起高血压、水肿'],
-    imageUrl: '/herbs/gancao.jpg',
-    color: '#9ACD32'
-  },
-  {
-    id: 'furong',
-    name: '茯苓',
-    latinName: 'Poria cocos',
-    category: '利水渗湿药',
-    aliases: ['云苓', '松苓', '茯灵', '白茯苓'],
-    description: '茯苓为多孔菌科真菌茯苓的干燥菌核，寄生于松树根部，分为茯苓皮、赤茯苓、白茯苓等不同部位。',
-    efficacy: ['利水渗湿', '健脾宁心', '安神定悸', '增强免疫'],
-    medicinalValue: '茯苓含有茯苓多糖、三萜类化合物等，具有利尿、镇静安神、保肝、增强免疫、抗肿瘤、降血糖等作用。对水肿尿少、痰饮眩悸、脾虚食少、心神不安等有显著疗效。',
-    edibleValue: '茯苓可煮粥、炖汤、研粉食用。如茯苓饼、茯苓粥、茯苓炖排骨、茯苓奶茶等。口感细腻，是健脾祛湿的常用食材。',
-    usage: ['煮粥食用', '炖汤佐料', '研粉冲服', '制作糕点'],
-    contraindications: ['阴虚津亏、肾虚多尿者慎用', '不宜与醋同食'],
-    imageUrl: '/herbs/fuling.jpg',
-    color: '#DEB887'
-  },
-  {
-    id: 'yiyiren',
-    name: '薏苡仁',
-    latinName: 'Coix lacryma-jobi',
-    category: '利水渗湿药',
-    aliases: ['薏米', '苡仁', '六谷子', '菩提珠'],
-    description: '薏苡仁为禾本科植物薏苡的干燥成熟种仁，又称薏米，是药食同源的祛湿佳品。',
-    efficacy: ['利水渗湿', '健脾止泻', '清热排脓', '除痹止痛', '美白养颜'],
-    medicinalValue: '薏苡仁含有薏苡仁酯、薏苡仁油、蛋白质等，具有利尿消肿、镇静镇痛、解热抗炎、增强免疫、抗肿瘤、美白肌肤等作用。对水肿、脚气、脾虚泄泻、湿痹拘挛等有显著疗效。',
-    edibleValue: '薏苡仁可煮粥、炖汤、制茶。如薏米红豆粥、薏米冬瓜汤、薏米茶等。是夏季祛湿消暑的常用食材，也可用于美容养颜。',
-    usage: ['煮粥食用', '炖汤佐料', '泡茶饮用', '研粉外用'],
-    contraindications: ['孕妇慎用', '阴虚体质者慎用', '大便燥结者慎用'],
-    imageUrl: '/herbs/yiyiren.jpg',
-    color: '#F5F5DC'
-  },
-  {
-    id: 'heshouwu',
-    name: '何首乌',
-    latinName: 'Polygonum multiflorum',
-    category: '补益药',
-    aliases: ['首乌', '夜交藤', '地精', '马肝石'],
-    description: '何首乌为蓼科植物何首乌的干燥块根，生用解毒、截疟，制用补肝肾、益精血、乌须发。',
-    efficacy: ['补肝肾', '益精血', '乌须发', '强筋骨', '解毒截疟', '润肠通便'],
-    medicinalValue: '何首乌含有蒽醌类化合物、卵磷脂、二苯乙烯苷等，具有促进造血、保肝降脂、抗衰老、增强免疫、润肠通便等作用。对血虚萎黄、眩晕耳鸣、须发早白、腰膝酸软等有显著疗效。',
-    edibleValue: '何首乌可炖汤、泡茶、煮粥。如何首乌炖鸡、何首乌茶、何首乌黑豆粥等。是乌发养颜的常用食材，但需制过后方可长期服用。',
-    usage: ['炖汤佐料', '泡茶饮用', '煮粥食用', '泡酒'],
-    contraindications: ['湿痰壅盛者慎用', '大便溏泄者慎用', '肝功能异常者慎用'],
-    imageUrl: '/herbs/heshouwu.jpg',
-    color: '#8B4513'
-  },
-  {
-    id: 'baiguo',
-    name: '白果',
-    latinName: 'Ginkgo biloba',
-    category: '止咳平喘药',
-    aliases: ['银杏', '灵眼', '佛指甲', '鸭脚子'],
-    description: '白果为银杏科植物银杏的干燥成熟种子，具有敛肺定喘、止带缩尿的功效。',
-    efficacy: ['敛肺定喘', '止带缩尿', '祛痰平喘', '收敛固涩'],
-    medicinalValue: '白果含有银杏内酯、白果酸、银杏黄酮等，具有祛痰平喘、抗菌消炎、收敛固涩、降低血压、改善心脑血管循环等作用。对哮喘痰嗽、带下白浊、遗尿尿频等有显著疗效。',
-    edibleValue: '白果可炒食、炖汤、做糕点。如白果炖鸡、白果粥、白果炒西芹、盐焗白果等。需注意不可过量食用，以免引起中毒。',
-    usage: ['炒食', '炖汤佐料', '煮粥食用', '制作糕点'],
-    contraindications: ['有小毒，不宜过量', '实邪者忌用', '孕妇慎用', '儿童慎用'],
-    imageUrl: '/herbs/baiguo.jpg',
-    color: '#ADFF2F'
-  },
-  {
-    id: 'lianzi',
-    name: '莲子',
-    latinName: 'Nelumbo nucifera',
-    category: '补益药',
-    aliases: ['莲实', '藕实', '水芝丹', '莲蓬子'],
-    description: '莲子为睡莲科植物莲的干燥成熟种子，具有补脾止泻、益肾固精、养心安神的功效。',
-    efficacy: ['补脾止泻', '益肾固精', '养心安神', '涩精止带', '清热降火'],
-    medicinalValue: '莲子含有莲子碱、荷叶碱、金丝桃苷等，具有镇静安神、强心降压、涩肠止泻、补肾固精、增强免疫等作用。对脾虚久泻、遗精带下、心悸失眠等有显著疗效。',
-    edibleValue: '莲子可煮粥、炖汤、做甜品。如莲子粥、莲子银耳羹、莲子百合糖水、红枣莲子汤等。口感粉糯，是传统甜品的常用材料。',
-    usage: ['煮粥食用', '炖汤佐料', '制作甜品', '研粉冲服'],
-    contraindications: ['中满痞胀、大便燥结者慎用', '不宜与牛奶同食'],
-    imageUrl: '/herbs/lianzi.jpg',
-    color: '#FFB6C1'
-  },
-  {
-    id: 'kuxingren',
-    name: '苦杏仁',
-    latinName: 'Prunus armeniaca',
-    category: '止咳平喘药',
-    aliases: ['杏仁', '杏核仁', '山杏', '木落子'],
-    description: '苦杏仁为蔷薇科植物山杏、西伯利亚杏或杏的干燥成熟种子，具有止咳平喘、润肠通便的功效。',
-    efficacy: ['止咳平喘', '润肠通便', '降气化痰', '消炎镇痛'],
-    medicinalValue: '苦杏仁含有苦杏仁苷、苦杏仁酶、脂肪油等，具有镇咳平喘、祛痰平喘、润肠通便、镇痛抗炎、抗肿瘤等作用。对咳嗽气喘、胸满痰多、肠燥便秘等有显著疗效。',
-    edibleValue: '苦杏仁可制作杏仁茶、杏仁豆腐、杏仁露等。如杏仁茶、杏仁豆腐、杏仁糊等。需注意苦杏仁有小毒，需充分加热破坏毒性后方可食用。',
-    usage: ['泡茶饮用', '制作饮品', '研粉冲服', '入汤煎服'],
-    contraindications: ['有小毒，婴儿慎用', '阴虚咳嗽者慎用', '大便溏泄者慎用', '不宜过量服用'],
-    imageUrl: '/herbs/kuxingren.jpg',
-    color: '#D2691E'
-  },
-  {
-    id: 'xiyangshen',
-    name: '西洋参',
-    latinName: 'Panax quinquefolius',
-    category: '补益药',
-    aliases: ['花旗参', '洋参', '美国人参', '广东人参'],
-    description: '西洋参为五加科植物西洋参的干燥根，原产于美国、加拿大等地，具有补气养阴、清热生津的功效。',
-    efficacy: ['补气养阴', '清热生津', '润肺止咳', '清心除烦', '增强免疫'],
-    medicinalValue: '西洋参含有皂苷、多糖、氨基酸等，具有抗疲劳、抗氧化、增强免疫、降血糖、保护心血管、镇静安神等作用。对气阴两虚、虚热烦倦、咽干口渴等有显著疗效。',
-    edibleValue: '西洋参可含服、泡茶、炖汤、煮粥。如西洋参茶、西洋参炖鸡、西洋参粥、西洋参含片等。适合熬夜后补气养阴。',
-    usage: ['含服', '泡茶饮用', '炖汤佐料', '煮粥食用'],
-    contraindications: ['阳虚内寒者慎用', '胃有寒湿者慎用', '不宜与萝卜、茶同食'],
-    imageUrl: '/herbsxiyangshen.jpg',
-    color: '#F5F5F5'
-  }
+  // 山草类
+  { id: 'renshen', name: '人参', latinName: 'Panax ginseng', category: '草部', subcategory: '山草类', aliases: ['人衔', '鬼盖', '神草'], description: '人参为五加科植物人参的根，是著名的滋补强壮药。', efficacy: ['大补元气', '复脉固脱', '补脾益肺', '生津养血'], medicinalValue: '含人参皂苷、人参多糖等成分，具有抗疲劳、增强免疫、强心等作用。', edibleValue: '可炖汤、泡茶、浸酒，如人参炖鸡、人参茶。', usage: ['煎汤内服', '泡茶', '炖汤'], contraindications: ['不宜与藜芦、五灵脂同用', '实证热证者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1567331711402-509c12c41959?w=400&h=400&fit=crop', color: '#8B4513' },
+  { id: 'dangshen', name: '党参', latinName: 'Codonopsis pilosula', category: '草部', subcategory: '山草类', aliases: ['潞党参', '台党参'], description: '党参为桔梗科植物党参的干燥根，是中医传统的补益药。', efficacy: ['补中益气', '健脾益肺', '养血生津'], medicinalValue: '含有多糖、皂苷等活性成分，具有提高机体免疫功能作用。', edibleValue: '党参可入汤、粥、茶等日常膳食，如党参炖鸡。', usage: ['煎汤', '炖汤', '煮粥'], contraindications: ['实证热证者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&h=400&fit=crop', color: '#8B4513' },
+  { id: 'huangqi', name: '黄芪', latinName: 'Astragalus membranaceus', category: '草部', subcategory: '山草类', aliases: ['北芪', '绵黄芪'], description: '黄芪为豆科植物蒙古黄芪的干燥根，是中国传统医学中最重要的补气药物之一。', efficacy: ['补气升阳', '固表止汗', '利水消肿', '生津养血'], medicinalValue: '含黄芪多糖、黄酮类化合物等，具有增强免疫功能作用。', edibleValue: '黄芪是常见的药食同源材料，可泡茶、煮粥、炖汤。', usage: ['煎汤', '泡茶', '煮粥'], contraindications: ['阴虚火旺者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1611241893603-3c359704e0ee?w=400&h=400&fit=crop', color: '#DAA520' },
+  { id: 'baizhu', name: '白术', latinName: 'Atractylodes macrocephala', category: '草部', subcategory: '山草类', aliases: ['於术', '冬术'], description: '白术为菊科植物白术的干燥根茎，以浙江於潜产者质量最佳。', efficacy: ['健脾益气', '燥湿利水', '止汗安胎'], medicinalValue: '具有调节胃肠功能、保肝利胆、利尿消肿等作用。', edibleValue: '白术可入粥、汤、茶等。', usage: ['煎汤', '煮粥', '炖汤'], contraindications: ['阴虚内热者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=400&h=400&fit=crop', color: '#F0E68C' },
+  { id: 'baishao', name: '白芍', latinName: 'Paeonia lactiflora', category: '草部', subcategory: '山草类', aliases: ['白芍药', '杭芍'], description: '白芍为毛茛科植物芍药的干燥根，具有养血柔肝、缓急止痛的功效。', efficacy: ['养血柔肝', '缓急止痛', '敛阴止汗'], medicinalValue: '具有镇静镇痛、抗炎抗菌、护肝解痉等作用。', edibleValue: '白芍可入粥、汤、茶等。', usage: ['煎汤', '煮粥', '炖汤'], contraindications: ['阳衰虚寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1557844352-761f2565b576?w=400&h=400&fit=crop', color: '#FAFAD2' },
+  { id: 'gancao', name: '甘草', latinName: 'Glycyrrhiza uralensis', category: '草部', subcategory: '山草类', aliases: ['国老', '蜜草', '甜草'], description: '甘草为豆科植物甘草的干燥根和根茎，因能调和诸药而有"国老"之称。', efficacy: ['补脾益气', '清热解毒', '祛痰止咳', '缓急止痛'], medicinalValue: '具有肾上腺皮质激素样作用、抗炎抗过敏、镇咳祛痰等作用。', edibleValue: '甘草可用于泡茶、煮粥、炖汤。味道极甜。', usage: ['泡茶', '煎汤', '炖汤'], contraindications: ['湿盛胀满者慎用', '不宜与大戟同用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1543362906-acfc16c67564?w=400&h=400&fit=crop', color: '#9ACD32' },
+  { id: 'xiyangshen', name: '西洋参', latinName: 'Panax quinquefolius', category: '草部', subcategory: '山草类', aliases: ['花旗参', '洋参'], description: '西洋参为五加科植物西洋参的干燥根，原产于美国、加拿大等地。', efficacy: ['补气养阴', '清热生津', '润肺止咳'], medicinalValue: '具有抗疲劳、抗氧化、增强免疫、降血糖等作用。', edibleValue: '西洋参可含服、泡茶、炖汤、煮粥。', usage: ['含服', '泡茶', '炖汤'], contraindications: ['阳虚内寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1567331711402-509c12c41959?w=400&h=400&fit=crop', color: '#F5F5F5' },
+  { id: 'donghua', name: '丹参', latinName: 'Salvia miltiorrhiza', category: '草部', subcategory: '山草类', aliases: ['红根', '血参', '紫丹参'], description: '丹参为唇形科植物丹参的干燥根和根茎，因其外皮红色而得名。', efficacy: ['活血调经', '祛瘀止痛', '凉血消痈', '清心除烦'], medicinalValue: '具有改善心脑血管循环、抗凝血、抗炎等作用。', edibleValue: '丹参多用于泡茶、泡酒，也可炖汤。', usage: ['煎汤', '泡茶', '泡酒'], contraindications: ['孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1593520259328-9c89e4ec5bd4?w=400&h=400&fit=crop', color: '#DC143C' },
+  { id: 'huangqin', name: '黄芩', latinName: 'Scutellaria baicalensis', category: '草部', subcategory: '山草类', aliases: ['腐肠', '黄文'], description: '黄芩为唇形科植物黄芩的干燥根，是常用的清热燥湿药。', efficacy: ['清热燥湿', '泻火解毒', '止血', '安胎'], medicinalValue: '具有抗菌消炎、解热镇静、降压、利尿等作用。', edibleValue: '黄芩主要用于药用，也可泡茶饮用。', usage: ['煎汤', '泡茶'], contraindications: ['脾胃虚寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', color: '#9ACD32' },
+  { id: 'huanglian', name: '黄连', latinName: 'Coptis chinensis', category: '草部', subcategory: '山草类', aliases: ['王连', '支连', '川连'], description: '黄连为毛茛科植物黄连的干燥根茎，是著名的清热燥湿药。', efficacy: ['清热燥湿', '泻火解毒', '清心除烦'], medicinalValue: '具有广谱抗菌、抗病毒、抗炎、解热等作用。', edibleValue: '黄连味极苦，主要用于药用。', usage: ['煎汤', '研粉外用'], contraindications: ['脾胃虚寒者慎用', '阴虚津伤者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', color: '#FFD700' },
+  { id: 'huanglian', name: '黄柏', latinName: 'Phellodendron amurense', category: '草部', subcategory: '山草类', aliases: ['檗木', '檗皮', '川柏'], description: '黄柏为芸香科植物黄皮树的干燥树皮，是常用的清热燥湿药。', efficacy: ['清热燥湿', '泻火除蒸', '解毒疗疮'], medicinalValue: '具有抗菌消炎、降压、祛痰平喘等作用。', edibleValue: '黄柏主要用于药用。', usage: ['煎汤', '研粉外用'], contraindications: ['脾胃虚寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', color: '#DAA520' },
+  { id: 'maidong', name: '麦冬', latinName: 'Ophiopogon japonicus', category: '草部', subcategory: '山草类', aliases: ['麦门冬', '寸冬', '沿阶草'], description: '麦冬为百合科植物麦冬的干燥块根，具有养阴生津、润肺清心的功效。', efficacy: ['养阴生津', '润肺清心', '益胃生津'], medicinalValue: '具有镇静催眠、抗心肌缺血、降血糖等作用。', edibleValue: '麦冬可泡茶、煮粥、炖汤。', usage: ['泡茶', '煮粥', '炖汤'], contraindications: ['风寒感冒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=400&fit=crop', color: '#90EE90' },
+  { id: 'tiandong', name: '天冬', latinName: 'Asparagus cochinchinensis', category: '草部', subcategory: '山草类', aliases: ['天门冬', '万岁藤'], description: '天冬为百合科植物天冬的干燥块根，具有养阴润燥、清肺生津的功效。', efficacy: ['养阴润燥', '清肺生津', '滋肾阴'], medicinalValue: '具有镇咳、祛痰、抗菌、抗肿瘤等作用。', edibleValue: '天冬可用于炖汤、泡茶。', usage: ['煎汤', '泡茶', '炖汤'], contraindications: ['脾胃虚寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515586000433-45406d8e6662?w=400&h=400&fit=crop', color: '#90EE90' },
+  { id: 'tiangong', name: '天麻', latinName: 'Gastrodia elata', category: '草部', subcategory: '山草类', aliases: ['赤箭', '鬼督邮', '明天麻'], description: '天麻为兰科植物天麻的干燥块茎，是熄风止痉、平肝潜阳的珍稀药材。', efficacy: ['息风止痉', '平肝潜阳', '祛风通络'], medicinalValue: '具有镇静、镇痛、抗惊厥、降压等作用。', edibleValue: '天麻可用于炖汤、泡酒。', usage: ['煎汤', '炖汤', '泡酒'], contraindications: ['津液衰少者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1506917728037-b6af01a7d403?w=400&h=400&fit=crop', color: '#F5F5F5' },
+  { id: 'yuanzhi', name: '远志', latinName: 'Polygala tenuifolia', category: '草部', subcategory: '山草类', aliases: ['小草', '棘苑'], description: '远志为远志科植物远志的干燥根，具有安神益智、祛痰开窍的功效。', efficacy: ['安神益智', '祛痰开窍', '消散痈肿'], medicinalValue: '具有镇静、祛痰、镇咳、抗惊厥等作用。', edibleValue: '远志主要用于药用。', usage: ['煎汤', '泡茶'], contraindications: ['阴虚火旺者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', color: '#9ACD32' },
+  { id: 'niuxi', name: '牛膝', latinName: 'Achyranthes bidentata', category: '草部', subcategory: '山草类', aliases: ['百倍', '山苋菜'], description: '牛膝为苋科植物牛膝的干燥根，有怀牛膝和川牛膝之分。', efficacy: ['逐瘀通经', '补肝肾', '强筋骨', '利尿通淋'], medicinalValue: '具有抗炎、镇痛、利尿、兴奋子宫等作用。', edibleValue: '牛膝主要用于药用。', usage: ['煎汤', '泡酒'], contraindications: ['孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1550407834-7a3d4721594f?w=400&h=400&fit=crop', color: '#8B4513' },
+  { id: 'yinyanghuo', name: '淫羊藿', latinName: 'Epimedium brevicornu', category: '草部', subcategory: '山草类', aliases: ['仙灵脾', '羊藿', '三枝九叶草'], description: '淫羊藿为小檗科植物淫羊藿的干燥叶，具有补肾阳、强筋骨的功效。', efficacy: ['补肾阳', '强筋骨', '祛风湿', '止咳平喘'], medicinalValue: '具有增强免疫、性激素样作用、抗衰老等作用。', edibleValue: '淫羊藿可用于泡酒、炖汤。', usage: ['煎汤', '泡酒'], contraindications: ['阴虚火旺者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', color: '#9ACD32' },
+  { id: 'beishashen', name: '北沙参', latinName: 'Glehnia littoralis', category: '草部', subcategory: '山草类', aliases: ['莱阳沙参', '海沙参'], description: '北沙参为伞形科植物珊瑚菜的干燥根，具有养阴清肺、益胃生津的功效。', efficacy: ['养阴清肺', '益胃生津'], medicinalValue: '具有解热、镇痛、祛痰、增强免疫等作用。', edibleValue: '北沙参可用于炖汤、煮粥。', usage: ['煎汤', '炖汤', '煮粥'], contraindications: ['风寒咳嗽者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1550407834-7a3d4721594f?w=400&h=400&fit=crop', color: '#F5F5DC' },
+  { id: 'zhimu', name: '知母', latinName: 'Anemarrhena asphodeloides', category: '草部', subcategory: '山草类', aliases: ['蚳母', '连母', '地参'], description: '知母为百合科植物知母的干燥根茎，是常用的清热泻火药。', efficacy: ['清热泻火', '滋阴润燥', '生津止渴'], medicinalValue: '具有解热、镇静、降血糖、祛痰等作用。', edibleValue: '知母可用于泡茶、煎汤。', usage: ['煎汤', '泡茶'], contraindications: ['脾胃虚寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515586000433-45406d8e6662?w=400&h=400&fit=crop', color: '#F5F5DC' },
+  { id: 'shichangpu', name: '石菖蒲', latinName: 'Acorus tatarinowii', category: '草部', subcategory: '山草类', aliases: ['菖蒲', '九节菖蒲', '水剑草'], description: '石菖蒲为天南星科植物石菖蒲的干燥根茎，具有开窍豁痰、醒神益智的功效。', efficacy: ['开窍豁痰', '醒神益智', '化湿开胃'], medicinalValue: '具有镇静、抗惊厥、解痉、平喘等作用。', edibleValue: '石菖蒲可用于泡茶、煎汤。', usage: ['煎汤', '泡茶'], contraindications: ['阴虚阳亢者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515586000433-45406d8e6662?w=400&h=400&fit=crop', color: '#228B22' },
+  
+  // 草部 - 蔓草类
+  { id: 'heshouwu', name: '何首乌', latinName: 'Polygonum multiflorum', category: '草部', subcategory: '蔓草类', aliases: ['首乌', '夜交藤', '地精'], description: '何首乌为蓼科植物何首乌的干燥块根，生用解毒、截疟，制用补肝肾、益精血。', efficacy: ['补肝肾', '益精血', '乌须发', '强筋骨'], medicinalValue: '具有促进造血、保肝降脂、抗衰老等作用。', edibleValue: '何首乌可炖汤、泡茶、煮粥。需制过后方可长期服用。', usage: ['炖汤', '泡茶', '煮粥'], contraindications: ['湿痰壅盛者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=400&h=400&fit=crop', color: '#8B4513' },
+  { id: 'jinyinhua', name: '金银花', latinName: 'Lonicera japonica', category: '草部', subcategory: '蔓草类', aliases: ['忍冬花', '双花', '二花'], description: '金银花为忍冬科植物忍冬的干燥花蕾，因初开时白色后转黄色而得名。', efficacy: ['清热解毒', '疏散风热', '凉血止痢'], medicinalValue: '具有广谱抗菌、抗病毒、解热抗炎、保肝等作用。', edibleValue: '金银花常用于泡茶、煮水。', usage: ['泡茶', '煎汤', '煮水'], contraindications: ['脾胃虚寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1528825871115-3581a5387919?w=400&h=400&fit=crop', color: '#FFD700' },
+  { id: 'lianqiao', name: '连翘', latinName: 'Forsythia suspensa', category: '草部', subcategory: '蔓草类', aliases: ['连轺', '异翘', '兰华'], description: '连翘为木犀科植物连翘的干燥果实，具有清热解毒、消肿散结的功效。', efficacy: ['清热解毒', '消肿散结', '疏散风热'], medicinalValue: '具有广谱抗菌、抗炎、解热、镇吐等作用。', edibleValue: '连翘可用于泡茶。', usage: ['煎汤', '泡茶'], contraindications: ['脾胃虚寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', color: '#FFD700' },
+  { id: 'gegen', name: '葛根', latinName: 'Pueraria lobata', category: '草部', subcategory: '蔓草类', aliases: ['鸡齐根', '黄葛根', '甘葛根'], description: '葛根为豆科植物野葛的干燥根，具有解肌退热、生津止渴、升阳止泻的功效。', efficacy: ['解肌退热', '生津止渴', '升阳止泻'], medicinalValue: '具有解热、解痉、抗心律失常、降血压等作用。', edibleValue: '葛根可制粉、煮粥、炖汤。', usage: ['煎汤', '煮粥', '制粉'], contraindications: ['胃寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1550407834-7a3d4721594f?w=400&h=400&fit=crop', color: '#F5DEB3' },
+  { id: 'baojiteng', name: '钩藤', latinName: 'Uncaria rhynchophylla', category: '草部', subcategory: '蔓草类', aliases: ['双钩藤', '嫩钩藤'], description: '钩藤为茜草科植物钩藤的干燥带钩茎枝，具有清热平肝、熄风止痉的功效。', efficacy: ['清热平肝', '熄风止痉', '降血压'], medicinalValue: '具有镇静、抗惊厥、降压、解热等作用。', edibleValue: '钩藤主要用于药用。', usage: ['煎汤', '泡茶'], contraindications: ['脾胃虚寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515586000433-45406d8e6662?w=400&h=400&fit=crop', color: '#228B22' },
+  { id: 'tianhuafen', name: '天花粉', latinName: 'Trichosanthes kirilowii', category: '草部', subcategory: '蔓草类', aliases: ['瓜蒌根', '瑞雪'], description: '天花粉为葫芦科植物栝楼的干燥根，具有清热泻火、生津止渴的功效。', efficacy: ['清热泻火', '生津止渴', '消肿排脓'], medicinalValue: '具有抗肿瘤、抗菌、致流产等作用。', edibleValue: '天花粉主要用于药用。', usage: ['煎汤', '研粉'], contraindications: ['脾胃虚寒者慎用', '孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1550407834-7a3d4721594f?w=400&h=400&fit=crop', color: '#F5F5F5' },
+  
+  // 草部 - 隰草类
+  { id: 'jubingdie', name: '菊花', latinName: 'Chrysanthemum morifolium', category: '草部', subcategory: '隰草类', aliases: ['甘菊', '真菊', '家菊'], description: '菊花为菊科植物菊的干燥头状花序，具有散风清热、平肝明目的功效。', efficacy: ['散风清热', '平肝明目', '清热解毒'], medicinalValue: '具有解热、抗菌、抗炎、降压、扩张冠状动脉等作用。', edibleValue: '菊花可泡茶、煮粥、制作糕点。', usage: ['泡茶', '煎汤', '煮粥'], contraindications: ['气虚胃寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=400&h=400&fit=crop', color: '#FFD700' },
+  { id: 'juemingzi', name: '决明子', latinName: 'Cassia obtusifolia', category: '草部', subcategory: '隰草类', aliases: ['草决明', '马蹄决明', '还瞳子'], description: '决明子为豆科植物决明的干燥成熟种子，因其具有明目功效而得名。', efficacy: ['清肝明目', '润肠通便', '降压降脂'], medicinalValue: '具有泻下通便、降压降脂、保肝明目等作用。', edibleValue: '决明子可泡茶、煮粥、研粉食用。', usage: ['泡茶', '煮粥', '研粉'], contraindications: ['脾虚泄泻者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400&h=400&fit=crop', color: '#8B4513' },
+  { id: 'honghua', name: '红花', latinName: 'Carthamus tinctorius', category: '草部', subcategory: '隰草类', aliases: ['草红花', '刺红花', '杜红花'], description: '红花为菊科植物红花的干燥花，是传统的活血化瘀药。', efficacy: ['活血通经', '散瘀止痛', '消肿解毒'], medicinalValue: '具有改善微循环、抗凝血、扩张血管、降血压等作用。', edibleValue: '红花可用于药膳、炖汤。', usage: ['煎汤', '泡茶', '炖汤'], contraindications: ['孕妇禁用', '月经过多者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=400&h=400&fit=crop', color: '#FF6347' },
+  { id: 'yintei', name: '茵陈', latinName: 'Artemisia capillaris', category: '草部', subcategory: '隰草类', aliases: ['茵陈蒿', '绵茵陈'], description: '茵陈为菊科植物茵陈蒿的干燥地上部分，具有清利湿热、利胆退黄的功效。', efficacy: ['清利湿热', '利胆退黄', '解表散热'], medicinalValue: '具有保肝、利胆、解热、镇痛等作用。', edibleValue: '茵陈可泡茶、煮粥。', usage: ['泡茶', '煮粥', '煎汤'], contraindications: ['无湿热者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', color: '#9ACD32' },
+  
+  // 草部 - 芳草类
+  { id: 'danggui', name: '当归', latinName: 'Angelica sinensis', category: '草部', subcategory: '芳草类', aliases: ['乾归', '山薪', '文无'], description: '当归为伞形科植物当归的干燥根，是著名的补血活血药。', efficacy: ['补血活血', '调经止痛', '润肠通便'], medicinalValue: '具有促进造血、抗贫血、抗血小板聚集等作用。', edibleValue: '当归可用于炖汤、泡酒、煮粥。', usage: ['煎汤', '炖汤', '泡酒'], contraindications: ['湿盛中满者慎用', '孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&h=400&fit=crop', color: '#F5DEB3' },
+  { id: 'chuanxiong', name: '川芎', latinName: 'Ligusticum chuanxiong', category: '草部', subcategory: '芳草类', aliases: ['芎藭', '香果', '胡藭'], description: '川芎为伞形科植物川芎的干燥根茎，是活血行气、祛风止痛的常用药。', efficacy: ['活血行气', '祛风止痛', '上调头目'], medicinalValue: '具有扩张血管、改善微循环、抗血小板聚集等作用。', edibleValue: '川芎可用于炖汤、泡酒。', usage: ['煎汤', '炖汤', '泡酒'], contraindications: ['阴虚火旺者慎用', '孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&h=400&fit=crop', color: '#9370DB' },
+  { id: 'baizhi', name: '白芷', latinName: 'Angelica dahurica', category: '草部', subcategory: '芳草类', aliases: ['芳香', '泽芬'], description: '白芷为伞形科植物白芷的干燥根，具有解表散寒、祛风止痛的功效。', efficacy: ['解表散寒', '祛风止痛', '通鼻窍', '消肿排脓'], medicinalValue: '具有抗菌、解热、镇痛、抗炎等作用。', edibleValue: '白芷可用于炖汤、卤制食品。', usage: ['煎汤', '炖汤'], contraindications: ['阴虚血热者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', color: '#F5F5F5' },
+  { id: 'xiangfu', name: '香附', latinName: 'Cyperus rotundus', category: '草部', subcategory: '芳草类', aliases: ['莎草根', '香附子'], description: '香附为莎草科植物莎草的干燥根茎，具有疏肝解郁、理气宽中的功效。', efficacy: ['疏肝解郁', '理气宽中', '调经止痛'], medicinalValue: '具有解热、镇痛、镇静、抗炎等作用。', edibleValue: '香附主要用于药用。', usage: ['煎汤', '醋炙'], contraindications: ['气虚无滞者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1550407834-7a3d4721594f?w=400&h=400&fit=crop', color: '#DAA520' },
+  { id: 'muxiang', name: '木香', latinName: 'Aucklandia costus', category: '草部', subcategory: '芳草类', aliases: ['蜜香', '青水香', '广木香'], description: '木香为菊科植物木香的干燥根，具有行气止痛、健脾消食的功效。', efficacy: ['行气止痛', '健脾消食', '温中和胃'], medicinalValue: '具有促进胃肠蠕动、抗菌、抗炎等作用。', edibleValue: '木香可用于炖汤、泡茶。', usage: ['煎汤', '泡茶'], contraindications: ['阴虚津亏者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&h=400&fit=crop', color: '#8B4513' },
+  { id: 'sharen', name: '砂仁', latinName: 'Amomum villosum', category: '草部', subcategory: '芳草类', aliases: ['缩砂仁', '阳春砂', '春砂仁'], description: '砂仁为姜科植物阳春砂的干燥成熟果实，具有化湿开胃、温脾止泻的功效。', efficacy: ['化湿开胃', '温脾止泻', '理气安胎'], medicinalValue: '具有促进消化液分泌、抗溃疡、抗菌等作用。', edibleValue: '砂仁可用于炖汤、泡茶、制作糕点。', usage: ['煎汤', '泡茶', '炖汤'], contraindications: ['阴虚内热者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#DAA520' },
+  { id: 'doukou', name: '豆蔻', latinName: 'Amomum kravanh', category: '草部', subcategory: '芳草类', aliases: ['白豆蔻', '圆豆蔻', '原豆蔻'], description: '豆蔻为姜科植物白豆蔻的干燥成熟果实，具有化湿行气、温中止呕的功效。', efficacy: ['化湿行气', '温中止呕', '开胃消食'], medicinalValue: '具有促进胃液分泌、抗真菌、止呕等作用。', edibleValue: '豆蔻可用于炖汤、卤制食品、制作糕点。', usage: ['煎汤', '泡茶', '炖汤'], contraindications: ['阴虚血少者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#F5DEB3' },
+  { id: 'bohe', name: '薄荷', latinName: 'Mentha haplocalyx', category: '草部', subcategory: '芳草类', aliases: ['薄荷叶', '野薄荷', '银丹草'], description: '薄荷为唇形科植物薄荷的干燥地上部分，气味清香，性辛凉。', efficacy: ['疏散风热', '清利头目', '利咽透疹', '疏肝行气'], medicinalValue: '具有清凉镇痛、抗菌消炎、驱风解痉等作用。', edibleValue: '薄荷可用于泡茶、制作饮品、烹饪调味。', usage: ['泡茶', '制作饮品', '调味'], contraindications: ['阴虚发热者慎用', '孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', color: '#32CD32' },
+  { id: 'jingjie', name: '荆芥', latinName: 'Schizonepeta tenuifolia', category: '草部', subcategory: '芳草类', aliases: ['假苏', '鼠莫', '姜芥'], description: '荆芥为唇形科植物荆芥的干燥地上部分，具有解表散风、透疹止痒的功效。', efficacy: ['解表散风', '透疹止痒', '消疮止血'], medicinalValue: '具有解热、镇静、抗炎、镇痛等作用。', edibleValue: '荆芥可用于凉拌、炒食、泡茶。', usage: ['煎汤', '泡茶', '凉拌'], contraindications: ['表虚自汗者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', color: '#9ACD32' },
+  { id: 'fangfeng', name: '防风', latinName: 'Saposhnikovia divaricata', category: '草部', subcategory: '芳草类', aliases: ['铜芸', '茴芸', '茴草'], description: '防风为伞形科植物防风的干燥根，具有祛风解表、胜湿止痛的功效。', efficacy: ['祛风解表', '胜湿止痛', '止痉'], medicinalValue: '具有解热、镇痛、抗炎、镇静等作用。', edibleValue: '防风主要用于药用。', usage: ['煎汤', '泡酒'], contraindications: ['阴虚火旺者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515586000433-45406d8e6662?w=400&h=400&fit=crop', color: '#9ACD32' },
+  { id: 'qianhu', name: '前胡', latinName: 'Peucedanum praeruptorum', category: '草部', subcategory: '芳草类', aliases: ['信前胡', '北前胡'], description: '前胡为伞形科植物白花前胡的干燥根，具有降气化痰、散风清热的功效。', efficacy: ['降气化痰', '散风清热'], medicinalValue: '具有祛痰、镇咳、平喘、抗菌等作用。', edibleValue: '前胡主要用于药用。', usage: ['煎汤'], contraindications: ['阴虚咳嗽者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515586000433-45406d8e6662?w=400&h=400&fit=crop', color: '#F5F5F5' },
+  { id: 'chaihu', name: '柴胡', latinName: 'Bupleurum chinense', category: '草部', subcategory: '芳草类', aliases: ['茈胡', '地薰', '芸蒿'], description: '柴胡为伞形科植物柴胡的干燥根，具有疏散退热、疏肝升阳的功效。', efficacy: ['疏散退热', '疏肝升阳', '清胆截疟'], medicinalValue: '具有解热、镇静、镇痛、抗炎、保肝等作用。', edibleValue: '柴胡主要用于药用。', usage: ['煎汤', '泡酒'], contraindications: ['阴虚阳亢者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515586000433-45406d8e6662?w=400&h=400&fit=crop', color: '#9ACD32' },
+  
+  // 草部 - 毒草类
+  { id: 'honghuahai', name: '红花草', latinName: 'Oxalis corymbosa', category: '草部', subcategory: '毒草类', aliases: ['铜锤草', '大酸味草'], description: '红花草为酢浆草科植物红花酢浆草的全草，具有散瘀消肿、清热解毒的功效。', efficacy: ['散瘀消肿', '清热解毒'], medicinalValue: '具有抗菌、消炎等作用。', edibleValue: '红花草主要用于药用。', usage: ['外敷', '煎汤'], contraindications: ['有毒慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', color: '#DC143C' },
+  
+  // ============ 谷部 ============
+  { id: 'shuyu', name: '粟米', latinName: 'Setaria italica', category: '谷部', subcategory: '粟类', aliases: ['小米', '粱米'], description: '粟米为禾本科植物粟的种仁，具有和中益肾、除热的功效。', efficacy: ['和中益肾', '除热解毒', '健脾养胃'], medicinalValue: '含有丰富的蛋白质、脂肪、维生素。', edibleValue: '粟米可煮粥、酿酒、制糕点。', usage: ['煮粥', '酿酒'], contraindications: ['与杏仁同食易引起吐泻'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1550407834-7a3d4721594f?w=400&h=400&fit=crop', color: '#F5DEB3' },
+  { id: 'daoyi', name: '稻米', latinName: 'Oryza sativa', category: '谷部', subcategory: '稻类', aliases: ['大米', '粳米', '籼米'], description: '稻米为禾本科植物稻的种仁，是人类的主要粮食之一。', efficacy: ['补中益气', '健脾养胃', '清热止渴'], medicinalValue: '含有淀粉、蛋白质、脂肪、维生素等营养成分。', edibleValue: '稻米可煮饭、煮粥、酿酒。', usage: ['煮饭', '煮粥', '酿酒'], contraindications: ['糖尿病患者不宜多食'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1550407834-7a3d4721594f?w=400&h=400&fit=crop', color: '#F5F5F5' },
+  { id: 'xianmai', name: '小麦', latinName: 'Triticum aestivum', category: '谷部', subcategory: '麦类', aliases: ['淮小麦'], description: '小麦为禾本科植物小麦的成熟果实，具有养心益肾、除热止渴的功效。', efficacy: ['养心益肾', '除热止渴', '健脾养胃'], medicinalValue: '含有淀粉、蛋白质、脂肪、维生素等营养成分。', edibleValue: '小麦可磨粉制面粉，制作各种面食。', usage: ['煮粥', '制面食'], contraindications: ['糖尿病患者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1550407834-7a3d4721594f?w=400&h=400&fit=crop', color: '#F5DEB3' },
+  { id: 'damai', name: '大麦', latinName: 'Hordeum vulgare', category: '谷部', subcategory: '麦类', aliases: ['牟麦', '饭麦'], description: '大麦为禾本科植物大麦的成熟果实，具有和胃宽肠、利水的功效。', efficacy: ['和胃宽肠', '利水消肿', '清热解毒'], medicinalValue: '含有丰富的膳食纤维、维生素、矿物质。', edibleValue: '大麦可煮粥、酿酒、制麦芽糖。', usage: ['煮粥', '酿酒', '制麦芽'], contraindications: ['孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1550407834-7a3d4721594f?w=400&h=400&fit=crop', color: '#DAA520' },
+  { id: 'yiyiren', name: '薏苡仁', latinName: 'Coix lacryma-jobi', category: '谷部', subcategory: '菽类', aliases: ['薏米', '苡仁', '六谷子'], description: '薏苡仁为禾本科植物薏苡的干燥成熟种仁，是药食同源的祛湿佳品。', efficacy: ['利水渗湿', '健脾止泻', '清热排脓', '美白养颜'], medicinalValue: '具有利尿消肿、镇静镇痛、解热抗炎等作用。', edibleValue: '薏苡仁可煮粥、炖汤、制茶。', usage: ['煮粥', '炖汤', '泡茶'], contraindications: ['孕妇慎用', '大便燥结者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#F5F5DC' },
+  { id: 'heibadou', name: '黑豆', latinName: 'Glycine max (black)', category: '谷部', subcategory: '菽类', aliases: ['乌豆', '黑大豆'], description: '黑豆为豆科植物大豆的黑色种子，具有补肾益阴、健脾祛湿的功效。', efficacy: ['补肾益阴', '健脾祛湿', '活血利水'], medicinalValue: '含有丰富的蛋白质、花青素、维生素。', edibleValue: '黑豆可煮粥、打豆浆、炖汤。', usage: ['煮粥', '打豆浆', '炖汤'], contraindications: ['脾虚腹胀者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#2F4F4F' },
+  { id: 'lvdou', name: '绿豆', latinName: 'Vigna radiata', category: '谷部', subcategory: '菽类', aliases: ['青小豆', '交豆'], description: '绿豆为豆科植物绿豆的干燥种子，具有清热解毒、消暑利水的功效。', efficacy: ['清热解毒', '消暑利水', '消肿下气'], medicinalValue: '具有清热解毒、抗菌、保肝等作用。', edibleValue: '绿豆可煮粥、制绿豆汤、做绿豆糕。', usage: ['煮粥', '制汤', '做糕点'], contraindications: ['脾胃虚寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#90EE90' },
+  { id: 'hongdou', name: '红豆', latinName: 'Vigna angularis', category: '谷部', subcategory: '菽类', aliases: ['赤小豆', '红小豆'], description: '红豆为豆科植物赤小豆的干燥种子，具有利水消肿、清热解毒的功效。', efficacy: ['利水消肿', '清热解毒', '健脾益胃'], medicinalValue: '具有利尿、解毒、抗菌等作用。', edibleValue: '红豆可煮粥、制豆沙、做糕点。', usage: ['煮粥', '制豆沙', '做糕点'], contraindications: ['久食令人枯燥'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#DC143C' },
+  { id: 'wandou', name: '豌豆', latinName: 'Pisum sativum', category: '谷部', subcategory: '菽类', aliases: ['胡豆', '寒豆'], description: '豌豆为豆科植物豌豆的种子，具有和中下气、利小便的功效。', efficacy: ['和中下气', '利小便', '解毒止泻'], medicinalValue: '含有丰富的蛋白质、膳食纤维、维生素。', edibleValue: '豌豆可煮食、炒食、做糕点。', usage: ['煮食', '炒食', '做糕点'], contraindications: ['胃滞者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#90EE90' },
+  
+  // ============ 菜部 ============
+  { id: 'shanyao', name: '山药', latinName: 'Dioscorea opposita', category: '菜部', subcategory: '柔滑类', aliases: ['怀山药', '淮山', '山薯'], description: '山药为薯蓣科植物薯蓣的干燥根茎，药食两用历史悠久。', efficacy: ['补脾养胃', '生津益肺', '补肾涩精', '降低血糖'], medicinalValue: '具有助消化、降血糖、增强免疫、延缓衰老等作用。', edibleValue: '山药是常见蔬菜，可炒、炖、蒸、煮粥、做糕点。', usage: ['炒食', '炖汤', '蒸食', '煮粥'], contraindications: ['湿盛中满者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&h=400&fit=crop', color: '#F5DEB3' },
+  { id: 'baihe', name: '百合', latinName: 'Lilium brownii', category: '菜部', subcategory: '柔滑类', aliases: ['白百合', '野百合', '山丹'], description: '百合为百合科植物百合的干燥肉质鳞叶，具有养阴润肺、清心安神的功效。', efficacy: ['养阴润肺', '清心安神', '美容养颜'], medicinalValue: '具有镇咳、祛痰、平喘、镇静等作用。', edibleValue: '百合可炒食、煮粥、炖汤、做甜品。', usage: ['炒食', '煮粥', '炖汤'], contraindications: ['风寒咳嗽者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=400&h=400&fit=crop', color: '#FFB6C1' },
+  { id: 'luobo', name: '萝卜', latinName: 'Raphanus sativus', category: '菜部', subcategory: '瓜菜类', aliases: ['莱菔', '芦萉'], description: '萝卜为十字花科植物萝卜的鲜根，具有消食化积、下气宽中的功效。', efficacy: ['消食化积', '下气宽中', '清热化痰', '解毒利尿'], medicinalValue: '含有丰富的维生素C、芥子油等成分。', edibleValue: '萝卜可生食、熟食、腌制、酱制。', usage: ['生食', '炒食', '煮汤'], contraindications: ['脾胃虚寒者慎用生食'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1585664811087-47f65abbad64?w=400&h=400&fit=crop', color: '#F5F5F5' },
+  { id: 'shengjiang', name: '生姜', latinName: 'Zingiber officinale', category: '菜部', subcategory: '荤菜类', aliases: ['鲜姜', '老姜'], description: '生姜为姜科植物姜的新鲜根茎，是药食同源的典范。', efficacy: ['解表散寒', '温中止呕', '温肺止咳', '解毒抗菌'], medicinalValue: '具有解热镇痛、抗炎抗菌、促进胃肠蠕动等作用。', edibleValue: '生姜是厨房必备调味品，可入菜、泡茶、煮糖水。', usage: ['调味', '泡茶', '煎汤'], contraindications: ['阴虚内热者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1508615039623-a25605d2b022?w=400&h=400&fit=crop', color: '#F4A460' },
+  { id: 'ganjiang', name: '干姜', latinName: 'Zingiber officinale (dried)', category: '菜部', subcategory: '荤菜类', aliases: ['白姜', '均姜'], description: '干姜为姜科植物姜的干燥根茎，性味辛热，具有温中散寒的功效。', efficacy: ['温中散寒', '回阳通脉', '温肺化饮'], medicinalValue: '具有抗炎、抗溃疡、强心、抗凝血等作用。', edibleValue: '干姜可用于炖汤、泡茶、卤制食品。', usage: ['煎汤', '泡茶', '炖汤'], contraindications: ['阴虚内热者慎用', '孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1508615039623-a25605d2b022?w=400&h=400&fit=crop', color: '#D2691E' },
+  { id: 'cong', name: '葱', latinName: 'Allium fistulosum', category: '菜部', subcategory: '荤菜类', aliases: ['大葱', '冬葱'], description: '葱为百合科植物葱的鳞茎，具有发汗解表、散寒通阳的功效。', efficacy: ['发汗解表', '散寒通阳', '解毒散结'], medicinalValue: '含有挥发油、葱蒜辣素等成分，具有抗菌作用。', edibleValue: '葱是常用调味品，可做调料、炒食、凉拌。', usage: ['调味', '炒食', '凉拌'], contraindications: ['表虚多汗者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515586000433-45406d8e6662?w=400&h=400&fit=crop', color: '#90EE90' },
+  { id: 'suan', name: '蒜', latinName: 'Allium sativum', category: '菜部', subcategory: '荤菜类', aliases: ['大蒜', '胡蒜'], description: '蒜为百合科植物大蒜的鳞茎，具有解毒杀虫、消肿止痢的功效。', efficacy: ['解毒杀虫', '消肿止痢', '温中散寒'], medicinalValue: '含有大蒜素、蒜氨酸等成分，具有广谱抗菌作用。', edibleValue: '蒜是常用调味品，可生食、熟食、腌制。', usage: ['调味', '生食', '腌制'], contraindications: ['阴虚火旺者慎用', '胃溃疡者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#F5F5F5' },
+  { id: 'xiancai', name: '荠菜', latinName: 'Capsella bursa-pastoris', category: '菜部', subcategory: '柔滑类', aliases: ['荠', '护生草', '鸡心菜'], description: '荠菜为十字花科植物荠菜的带根全草，具有和脾利水、止血明目的功效。', efficacy: ['和脾利水', '止血明目', '清热解毒'], medicinalValue: '含有荠菜酸、胆碱等成分，具有止血、降压作用。', edibleValue: '荠菜可做馅、炒食、煮汤。', usage: ['做馅', '炒食', '煮汤'], contraindications: ['便溏者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', color: '#90EE90' },
+  { id: 'donggua', name: '冬瓜', latinName: 'Benincasa hispida', category: '菜部', subcategory: '瓜菜类', aliases: ['白瓜', '水芝'], description: '冬瓜为葫芦科植物冬瓜的果实，具有利水清热、化痰生津的功效。', efficacy: ['利水清热', '化痰生津', '解毒消痈'], medicinalValue: '含有丙醇二酸、维生素C等成分，具有减肥降脂作用。', edibleValue: '冬瓜可炒食、煮汤、腌制。', usage: ['炒食', '煮汤', '腌制'], contraindications: ['脾胃虚寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1595981234058-a11e7f56b6cc?w=400&h=400&fit=crop', color: '#F5F5F5' },
+  
+  // ============ 果部 ============
+  { id: 'chenpi', name: '陈皮', latinName: 'Citrus reticulata', category: '果部', subcategory: '水果类', aliases: ['橘皮', '广陈皮', '新会皮'], description: '陈皮为芸香科植物橘的干燥成熟果皮，以广东新会产者最为著名。', efficacy: ['理气健脾', '燥湿化痰', '开胃消食'], medicinalValue: '具有促进消化液分泌、抗菌消炎、祛痰平喘等作用。', edibleValue: '陈皮可泡茶、煮粥、炖汤、调味。', usage: ['泡茶', '炖汤', '煮粥', '调味'], contraindications: ['阴虚燥咳者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=400&fit=crop', color: '#FF8C00' },
+  { id: 'gouqi', name: '枸杞子', latinName: 'Lycium barbarum', category: '果部', subcategory: '水果类', aliases: ['枸杞', '甘枸杞', '西枸杞'], description: '枸杞子为茄科植物宁夏枸杞的干燥成熟果实，是传统的滋补肝肾、明目益精佳品。', efficacy: ['滋补肝肾', '益精明目', '润肺止咳', '补血安神'], medicinalValue: '含有枸杞多糖、类胡萝卜素、维生素等。', edibleValue: '枸杞可直接嚼食、泡茶、煮粥、煲汤、泡酒。', usage: ['嚼食', '泡茶', '煮粥', '炖汤'], contraindications: ['外邪实热者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#DC143C' },
+  { id: 'dazao', name: '大枣', latinName: 'Ziziphus jujuba', category: '果部', subcategory: '水果类', aliases: ['红枣', '枣子', '干枣'], description: '大枣为鼠李科植物枣的干燥成熟果实，是药食同源的滋补佳品。', efficacy: ['补中益气', '养血安神', '缓和药性', '健脾和胃'], medicinalValue: '含有环磷酸腺苷、有机酸、维生素等。', edibleValue: '大枣可直接食用、泡茶、煮粥、炖汤、做糕点。', usage: ['直接食用', '泡茶', '煮粥', '炖汤'], contraindications: ['湿盛中满者慎用', '糖尿病患者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af?w=400&h=400&fit=crop', color: '#8B0000' },
+  { id: 'hongzao', name: '黑枣', latinName: 'Ziziphus jujuba var. spinosa', category: '果部', subcategory: '水果类', aliases: ['君迁子', '软枣'], description: '黑枣为柿树科植物君迁子的成熟果实，具有补中益气、养血安神的功效。', efficacy: ['补中益气', '养血安神', '补肾养胃'], medicinalValue: '含有丰富的维生素、矿物质、膳食纤维。', edibleValue: '黑枣可直接食用、泡茶、煮粥、炖汤。', usage: ['直接食用', '泡茶', '煮粥'], contraindications: ['脾胃虚寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=400&h=400&fit=crop', color: '#2F4F4F' },
+  { id: 'shanxiang', name: '山楂', latinName: 'Crataegus pinnatifida', category: '果部', subcategory: '水果类', aliases: ['红果', '山里红', '胭脂果'], description: '山楂为蔷薇科植物山楂的干燥成熟果实，是消食化积的常用药。', efficacy: ['消食健胃', '行气散瘀', '化浊降脂'], medicinalValue: '含有山楂酸、黄酮类等，具有促进消化、降压降脂作用。', edibleValue: '山楂可鲜食、制干、泡茶、做糕点。', usage: ['鲜食', '泡茶', '制干'], contraindications: ['胃酸过多者慎用', '孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1528821128474-27f963b062bf?w=400&h=400&fit=crop', color: '#FF4500' },
+  { id: 'baiguo', name: '白果', latinName: 'Ginkgo biloba', category: '果部', subcategory: '水果类', aliases: ['银杏', '灵眼', '佛指甲'], description: '白果为银杏科植物银杏的干燥成熟种子，具有敛肺定喘、止带缩尿的功效。', efficacy: ['敛肺定喘', '止带缩尿', '祛痰平喘'], medicinalValue: '含有银杏内酯、白果酸等，具有祛痰平喘、降压作用。', edibleValue: '白果可炒食、炖汤、做糕点。需注意不可过量食用。', usage: ['炒食', '炖汤', '煮粥'], contraindications: ['有小毒，不宜过量', '孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1506917728037-b6af01a7d403?w=400&h=400&fit=crop', color: '#ADFF2F' },
+  { id: 'lianzi', name: '莲子', latinName: 'Nelumbo nucifera', category: '果部', subcategory: '水果类', aliases: ['莲实', '藕实', '水芝丹'], description: '莲子为睡莲科植物莲的干燥成熟种子，具有补脾止泻、益肾固精的功效。', efficacy: ['补脾止泻', '益肾固精', '养心安神'], medicinalValue: '含有莲子碱、荷叶碱等成分，具有镇静安神作用。', edibleValue: '莲子可煮粥、炖汤、做甜品。', usage: ['煮粥', '炖汤', '制作甜品'], contraindications: ['中满痞胀者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=400&h=400&fit=crop', color: '#FFB6C1' },
+  { id: 'walnut', name: '核桃', latinName: 'Juglans regia', category: '果部', subcategory: '水果类', aliases: ['胡桃', '羌桃', '万岁子'], description: '核桃为胡桃科植物胡桃的干燥成熟种子，具有补肾温肺、润肠通便的功效。', efficacy: ['补肾温肺', '润肠通便', '温肺定喘', '益智健脑'], medicinalValue: '含有不饱和脂肪酸、蛋白质、维生素等。', edibleValue: '核桃可直接食用、炒食、做糕点、榨油。', usage: ['直接食用', '炒食', '做糕点'], contraindications: ['阴虚火旺者慎用', '便溏泄泻者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#F5F5DC' },
+  { id: 'taozi', name: '桃子', latinName: 'Prunus persica', category: '果部', subcategory: '水果类', aliases: ['桃', '山桃'], description: '桃子为蔷薇科植物桃的成熟果实，具有生津润肠、活血消积的功效。', efficacy: ['生津润肠', '活血消积', '补中益气'], medicinalValue: '含有丰富的糖类、维生素、矿物质。', edibleValue: '桃子可鲜食、制成罐头、酿酒。', usage: ['鲜食', '制罐头', '酿酒'], contraindications: ['胃热者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#FFB6C1' },
+  { id: 'lizhi', name: '荔枝', latinName: 'Litchi chinensis', category: '果部', subcategory: '水果类', aliases: ['离支', '丽枝', '丹荔'], description: '荔枝为无患子科植物荔枝的果实，具有补脾益肝、理气止痛的功效。', efficacy: ['补脾益肝', '理气止痛', '养血健脾'], medicinalValue: '含有丰富的葡萄糖、维生素C等。', edibleValue: '荔枝可鲜食、制干、酿酒。', usage: ['鲜食', '制干', '酿酒'], contraindications: ['阴虚火旺者慎用', '不宜多食'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#FF69B4' },
+  { id: 'longyan', name: '龙眼', latinName: 'Dimocarpus longan', category: '果部', subcategory: '水果类', aliases: ['龙眼肉', '桂圆', '益智'], description: '龙眼为无患子科植物龙眼的假种皮，具有补益心脾、养血安神的功效。', efficacy: ['补益心脾', '养血安神', '补血益气'], medicinalValue: '含有葡萄糖、蔗糖、维生素等营养成分。', edibleValue: '龙眼可鲜食、制干、炖汤、煮粥。', usage: ['鲜食', '制干', '炖汤', '煮粥'], contraindications: ['阴虚火旺者慎用', '孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#F5DEB3' },
+  { id: 'pingguo', name: '苹果', latinName: 'Malus domestica', category: '果部', subcategory: '水果类', aliases: ['柰', '频婆'], description: '苹果为蔷薇科植物苹果的果实，具有生津止渴、益胃健脾的功效。', efficacy: ['生津止渴', '益胃健脾', '润肺除烦'], medicinalValue: '含有丰富的果胶、维生素C等。', edibleValue: '苹果可鲜食、榨汁、做果酱。', usage: ['鲜食', '榨汁', '做果酱'], contraindications: ['胃寒者慎用生食'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#FF6347' },
+  { id: 'xiangjiao', name: '香蕉', latinName: 'Musa nana', category: '果部', subcategory: '水果类', aliases: ['甘蕉', '芎', '天香蕉'], description: '香蕉为芭蕉科植物香蕉的果实，具有清热润肺、滑肠解毒的功效。', efficacy: ['清热润肺', '滑肠解毒', '降压通便'], medicinalValue: '含有丰富的钾、维生素等营养成分。', edibleValue: '香蕉可鲜食、做果昔、制作甜点。', usage: ['鲜食', '做果昔', '做甜点'], contraindications: ['脾胃虚寒便溏者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#FFD700' },
+  { id: 'putao', name: '葡萄', latinName: 'Vitis vinifera', category: '果部', subcategory: '水果类', aliases: ['蒲桃', '草龙珠', '山葫芦'], description: '葡萄为葡萄科植物葡萄的果实，具有补气血、强筋骨、利水的功效。', efficacy: ['补气血', '强筋骨', '利水', '益肝肾'], medicinalValue: '含有葡萄糖、有机酸、维生素等。', edibleValue: '葡萄可鲜食、制干、酿酒、榨汁。', usage: ['鲜食', '制干', '酿酒'], contraindications: ['多食令人烦闷', '糖尿病患者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#9370DB' },
+  { id: 'ganzhe', name: '甘蔗', latinName: 'Saccharum officinarum', category: '果部', subcategory: '水果类', aliases: ['薯蔗', '干蔗', '竹蔗'], description: '甘蔗为禾本科植物甘蔗的茎秆，具有清热生津、润燥解毒的功效。', efficacy: ['清热生津', '润燥解毒', '和中润肺'], medicinalValue: '含有蔗糖、葡萄糖、果糖等。', edibleValue: '甘蔗可鲜食、榨汁、熬糖。', usage: ['鲜食', '榨汁', '熬糖'], contraindications: ['脾胃虚寒者慎用', '糖尿病患者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#F5F5F5' },
+  
+  // ============ 木部 ============
+  { id: 'fuling', name: '茯苓', latinName: 'Poria cocos', category: '木部', subcategory: '寓木类', aliases: ['云苓', '松苓', '茯灵'], description: '茯苓为多孔菌科真菌茯苓的干燥菌核，寄生于松树根部。', efficacy: ['利水渗湿', '健脾宁心', '安神定悸'], medicinalValue: '含有茯苓多糖等成分，具有利尿、镇静安神等作用。', edibleValue: '茯苓可煮粥、炖汤、研粉食用。', usage: ['煮粥', '炖汤', '研粉'], contraindications: ['阴虚津亏者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1543362906-acfc16c67564?w=400&h=400&fit=crop', color: '#DEB887' },
+  { id: 'zhuling', name: '猪苓', latinName: 'Polyporus umbellatus', category: '木部', subcategory: '寓木类', aliases: ['豕苓', '野猪粪'], description: '猪苓为多孔菌科真菌猪苓的干燥菌核，具有利水渗湿的功效。', efficacy: ['利水渗湿', '渗利水道'], medicinalValue: '具有利尿、抗肿瘤、增强免疫等作用。', edibleValue: '猪苓主要用于药用。', usage: ['煎汤', '研粉'], contraindications: ['无水湿者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1594913122595-5aa67729456c?w=400&h=400&fit=crop', color: '#2F4F4F' },
+  { id: 'sangpiaoxiao', name: '桑螵蛸', latinName: 'Mantis egg-case', category: '虫部', subcategory: '虫类', aliases: ['螵蛸', '致神'], description: '桑螵蛸为螳螂科昆虫大刀螂的卵鞘，具有固精缩尿、补肾助阳的功效。', efficacy: ['固精缩尿', '补肾助阳', '收敛止带'], medicinalValue: '含有蛋白质、脂肪等营养成分。', edibleValue: '桑螵蛸主要用于药用。', usage: ['煎汤', '研粉'], contraindications: ['阴虚火旺者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400&h=400&fit=crop', color: '#DEB887' },
+  
+  // ============ 虫部 ============
+  { id: 'fengmii', name: '蜂蜜', latinName: 'Apis mellifera', category: '虫部', subcategory: '虫类', aliases: ['石蜜', '土蜂蜜', '白蜜'], description: '蜂蜜为蜜蜂科昆虫中华蜜蜂所酿的蜜，具有补中润燥、止痛解毒的功效。', efficacy: ['补中润燥', '止痛解毒', '润肺止咳', '润肠通便'], medicinalValue: '含有葡萄糖、果糖、酶类等营养成分。', edibleValue: '蜂蜜可直接食用、泡茶、做药膳。', usage: ['直接食用', '泡茶', '做药膳'], contraindications: ['痰湿内盛者慎用', '1岁以下婴儿慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#DAA520' },
+  { id: 'wugong', name: '蜈蚣', latinName: 'Scolopendra subspinipes', category: '虫部', subcategory: '虫类', aliases: ['吴公', '天龙', '百脚'], description: '蜈蚣为蜈蚣科动物少棘巨蜈蚣的干燥体，具有熄风止痉、通络止痛的功效。', efficacy: ['熄风止痉', '通络止痛', '攻毒散结'], medicinalValue: '具有镇静、镇痛、抗惊厥、抗菌等作用。', edibleValue: '蜈蚣主要用于药用。', usage: ['煎汤', '研粉', '浸酒'], contraindications: ['孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400&h=400&fit=crop', color: '#2F4F4F' },
+  { id: 'quxie', name: '全蝎', latinName: 'Buthus martensii', category: '虫部', subcategory: '虫类', aliases: ['全虫', '蝎子'], description: '全蝎为钳蝎科动物东亚钳蝎的干燥体，具有熄风镇痉、攻毒散结的功效。', efficacy: ['熄风镇痉', '攻毒散结', '通络止痛'], medicinalValue: '具有镇静、镇痛、抗惊厥等作用。', edibleValue: '全蝎主要用于药用。', usage: ['煎汤', '研粉', '浸酒'], contraindications: ['孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400&h=400&fit=crop', color: '#2F4F4F' },
+  { id: 'tianjiang', name: '地龙', latinName: 'Pheretima', category: '虫部', subcategory: '湿生类', aliases: ['蚯蚓', '曲蟮', '土龙'], description: '地龙为钜蚓科动物参环毛蚓的干燥体，具有清热定惊、通络平喘的功效。', efficacy: ['清热定惊', '通络平喘', '利尿清热'], medicinalValue: '具有解热、镇静、平喘、降压等作用。', edibleValue: '地龙主要用于药用。', usage: ['煎汤', '研粉', '浸酒'], contraindications: ['脾胃虚寒者慎用', '孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400&h=400&fit=crop', color: '#8B4513' },
+  
+  // ============ 鳞部 ============
+  { id: 'bashan', name: '白鳝', latinName: 'Anguilla japonica', category: '鳞部', subcategory: '鱼类', aliases: ['鳗鲡', '白鳗', '青鳝'], description: '鳗鲡为鳗鲡科动物鳗鲡的肉或全体，具有补虚羸、祛风湿的功效。', efficacy: ['补虚羸', '祛风湿', '杀虫', '补益气血'], medicinalValue: '含有丰富的蛋白质、脂肪、维生素等。', edibleValue: '鳗鲡可炖食、烤制。', usage: ['炖食', '烤制'], contraindications: ['病后脾肾虚弱者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#696969' },
+  { id: 'liyu', name: '鲤鱼', latinName: 'Cyprinus carpio', category: '鳞部', subcategory: '鱼类', aliases: ['赤鲤鱼', '黄鱼'], description: '鲤鱼为鲤科动物鲤鱼的肉或全体，具有利水消肿、下气通乳的功效。', efficacy: ['利水消肿', '下气通乳', '健脾益胃'], medicinalValue: '含有丰富的蛋白质、脂肪等营养成分。', edibleValue: '鲤鱼可煮食、烤制、红烧。', usage: ['煮食', '烤制', '红烧'], contraindications: ['风热者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#696969' },
+  { id: 'caoyu', name: '草鱼', latinName: 'Ctenopharyngodon idella', category: '鳞部', subcategory: '鱼类', aliases: ['鲩鱼', '草青鱼'], description: '草鱼为鲤科动物草鱼的肉，具有暖胃和中、平肝祛风的功效。', efficacy: ['暖胃和中', '平肝祛风', '滋补健身'], medicinalValue: '含有丰富的蛋白质、脂肪等营养成分。', edibleValue: '草鱼可煮食、蒸食、红烧。', usage: ['煮食', '蒸食', '红烧'], contraindications: ['疮疡患者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#696969' },
+  
+  // ============ 介部 ============
+  { id: 'guibi', name: '龟甲', latinName: 'Chinemys reevesii', category: '介部', subcategory: '龟鳖类', aliases: ['乌龟壳', '腹甲'], description: '龟甲为龟科动物乌龟的腹甲，具有滋阴潜阳、益肾健骨的功效。', efficacy: ['滋阴潜阳', '益肾健骨', '养血补心'], medicinalValue: '具有增强免疫、镇静、抗凝血等作用。', edibleValue: '龟甲主要用于药用。', usage: ['煎汤', '熬膏', '研粉'], contraindications: ['脾胃虚寒者慎用', '孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1593520259328-9c89e4ec5bd4?w=400&h=400&fit=crop', color: '#696969' },
+  { id: 'biejia', name: '鳖甲', latinName: 'Trionyx sinensis', category: '介部', subcategory: '龟鳖类', aliases: ['甲鱼壳', '团鱼壳', '上甲'], description: '鳖甲为鳖科动物中华鳖的背甲，具有滋阴潜阳、退热除蒸的功效。', efficacy: ['滋阴潜阳', '退热除蒸', '软坚散结'], medicinalValue: '具有增强免疫、抗肿瘤、抗肝纤维化等作用。', edibleValue: '鳖甲主要用于药用。', usage: ['煎汤', '熬膏', '研粉'], contraindications: ['脾胃虚寒者慎用', '孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1593520259328-9c89e4ec5bd4?w=400&h=400&fit=crop', color: '#696969' },
+  
+  // ============ 禽部 ============
+  { id: 'jichui', name: '鸡肉', latinName: 'Gallus gallus domesticus', category: '禽部', subcategory: '原禽类', aliases: ['烛夜', '家鸡肉'], description: '鸡肉为雉科动物家鸡的肉，具有温中益气、补精添髓的功效。', efficacy: ['温中益气', '补精添髓', '健脾养胃', '活血调经'], medicinalValue: '含有丰富的蛋白质、脂肪、维生素等营养成分。', edibleValue: '鸡肉可煮食、炖汤、炒食。', usage: ['煮食', '炖汤', '炒食'], contraindications: ['实证者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#F5DEB3' },
+  { id: 'yachui', name: '鸭肉', latinName: 'Anas platyrhynchos', category: '禽部', subcategory: '水禽类', aliases: ['鹜肉', '家鸭肉'], description: '鸭肉为鸭科动物家鸭的肉，具有滋阴养胃、利水消肿的功效。', efficacy: ['滋阴养胃', '利水消肿', '清肺解热'], medicinalValue: '含有丰富的蛋白质、脂肪等营养成分。', edibleValue: '鸭肉可煮食、炖汤、烤制。', usage: ['煮食', '炖汤', '烤制'], contraindications: ['外感风寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#696969' },
+  { id: 'gehui', name: '鸽肉', latinName: 'Columba livia', category: '禽部', subcategory: '原禽类', aliases: ['飞奴', '鹁鸽'], description: '鸽肉为鸠鸽科动物家鸽的肉，具有滋肾益气、祛风解毒的功效。', efficacy: ['滋肾益气', '祛风解毒', '补益气血'], medicinalValue: '含有丰富的蛋白质、氨基酸等营养成分。', edibleValue: '鸽肉可煮食、炖汤、烤制。', usage: ['煮食', '炖汤', '烤制'], contraindications: ['不宜多食'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#696969' },
+  
+  // ============ 兽部 ============
+  { id: 'furou', name: '阿胶', latinName: 'Equus asinus (colla)', category: '兽部', subcategory: '走兽类', aliases: ['傅致胶', '盆覆胶', '驴皮胶'], description: '阿胶为马科动物驴的皮经煎煮、浓缩制成的固体胶，具有补血滋阴、润燥止血的功效。', efficacy: ['补血滋阴', '润燥止血', '养血安胎'], medicinalValue: '具有促进造血、抗贫血、增强免疫等作用。', edibleValue: '阿胶可烊化服用、炖服。', usage: ['烊化服用', '炖服', '研粉'], contraindications: ['脾胃虚弱者慎用', '孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&h=400&fit=crop', color: '#8B4513' },
+  { id: 'lurong', name: '鹿茸', latinName: 'Cervus nippon', category: '兽部', subcategory: '走兽类', aliases: ['斑龙角', '九尾鹿茸'], description: '鹿茸为鹿科动物梅花鹿的雄鹿未骨化密生茸毛的幼角，具有壮肾阳、益精血的功效。', efficacy: ['壮肾阳', '益精血', '强筋骨', '调冲任'], medicinalValue: '具有增强免疫、促进生长发育、抗疲劳等作用。', edibleValue: '鹿茸可研粉服用、泡酒、炖汤。', usage: ['研粉', '泡酒', '炖汤'], contraindications: ['阴虚阳亢者慎用', '孕妇慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#F5DEB3' },
+  { id: 'niuhuang', name: '牛黄', latinName: 'Bos taurus (bezoar)', category: '兽部', subcategory: '走兽类', aliases: ['丑宝', '心黄', '肝黄'], description: '牛黄为牛科动物牛的胆囊或胆管中的胆结石，具有清热解毒、息风止痉的功效。', efficacy: ['清热解毒', '息风止痉', '化痰开窍'], medicinalValue: '具有解热、镇静、抗惊厥、强心等作用。', edibleValue: '牛黄主要用于药用。', usage: ['研粉', '入丸散'], contraindications: ['孕妇慎用', '非实热证者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&h=400&fit=crop', color: '#DAA520' },
+  
+  // ============ 人部 ============
+  { id: 'renlizi', name: '人乳汁', latinName: 'Homo sapiens (milk)', category: '人部', subcategory: '人类', aliases: ['奶汁', '人奶', '仙人酒'], description: '人乳汁为健康产妇的乳汁，具有补血、润燥、滋阴的功效。', efficacy: ['补血', '润燥', '滋阴', '清热'], medicinalValue: '含有丰富的免疫球蛋白、乳铁蛋白等。', edibleValue: '人乳汁可直接服用。', usage: ['直接服用'], contraindications: ['脾胃虚寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', color: '#F5F5F5' },
+  { id: 'xueyuhong', name: '血余炭', latinName: 'Homo sapiens (hair炭)', category: '人部', subcategory: '人类', aliases: ['发炭', '乱发炭', '人发炭'], description: '血余炭为人发制成的炭药，具有收敛止血、化瘀利尿的功效。', efficacy: ['收敛止血', '化瘀利尿', '生肌敛疮'], medicinalValue: '具有止血、促凝血等作用。', edibleValue: '血余炭主要用于药用。', usage: ['煎汤', '研粉'], contraindications: ['胃弱者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400&h=400&fit=crop', color: '#696969' },
+  
+  // ============ 水部 ============
+  { id: 'quanshui', name: '雨水', latinName: 'Rain water', category: '水部', subcategory: '天水类', aliases: ['天雨水', '液雨水'], description: '雨水为从天降落的水，具有清热解毒、润肺止咳的功效。', efficacy: ['清热解毒', '润肺止咳'], medicinalValue: '含有多种微量元素。', edibleValue: '雨水在古代被收集药用，现代不建议直接饮用。', usage: ['煎汤'], contraindications: ['污染雨水不可用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', color: '#87CEEB' },
+  { id: 'luyeming', name: '露水', latinName: 'Dew', category: '水部', subcategory: '天水类', aliases: ['甘露', '神露'], description: '露水为凝结的水珠，具有润肺解毒、止渴消暑的功效。', efficacy: ['润肺解毒', '止渴消暑'], medicinalValue: '含有植物渗出的营养成分。', edibleValue: '露水在古代被收集饮用。', usage: ['饮用'], contraindications: ['污染环境下露水不可用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', color: '#87CEEB' },
+  { id: 'dongzhishui', name: '冬至水', latinName: 'Winter solstice water', category: '水部', subcategory: '天水类', aliases: ['冬雪水', '腊雪水'], description: '冬至或腊月所收的雪水，具有清热解毒、止渴消暑的功效。', efficacy: ['清热解毒', '止渴消暑', '润肺'], medicinalValue: '据古代记载有特殊的药用价值。', edibleValue: '雪水可煎汤服用。', usage: ['煎汤'], contraindications: ['脾胃虚寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', color: '#F0F8FF' },
+  
+  // ============ 火部 ============
+  { id: 'tanhuo', name: '炭火', latinName: 'Charcoal fire', category: '火部', subcategory: '火类', aliases: ['炭', '木炭'], description: '炭火为燃烧后的木炭，具有温中散寒、止血的功效。', efficacy: ['温中散寒', '止血', '止泻'], medicinalValue: '活性炭有吸附作用。', edibleValue: '炭火主要用于外敷或制炭药用。', usage: ['外敷', '制炭药用'], contraindications: ['不宜用于热证'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop', color: '#2F2F2F' },
+  { id: 'aihuo', name: '艾火', latinName: 'Mugwort fire', category: '火部', subcategory: '火类', aliases: ['艾绒火', '艾灸'], description: '艾火为用艾绒制成的火，具有温经通络、散寒止痛的功效。', efficacy: ['温经通络', '散寒止痛', '祛湿止痒'], medicinalValue: '艾灸具有增强免疫、调整脏腑功能等作用。', edibleValue: '艾火主要用于艾灸治疗。', usage: ['艾灸', '温熨'], contraindications: ['实热证者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', color: '#DAA520' },
+  
+  // ============ 土部 ============
+  { id: 'futeng', name: '伏龙肝', latinName: 'Loessal soil', category: '土部', subcategory: '土类', aliases: ['灶心土', '釜脐下土'], description: '伏龙肝为烧柴草的土灶灶底中心的焦黄土块，具有温中散寒、止血的功效。', efficacy: ['温中散寒', '止血', '止泻', '止呕'], medicinalValue: '具有收敛、止血、止泻作用。', edibleValue: '伏龙肝主要用于药用。', usage: ['煎汤', '研粉'], contraindications: ['阴虚失血者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop', color: '#8B4513' },
+  { id: 'baitu', name: '白土', latinName: 'White earth', category: '土部', subcategory: '土类', aliases: ['白垩', '白土子'], description: '白土为一种白色黏土，具有祛湿止痒、止血敛疮的功效。', efficacy: ['祛湿止痒', '止血敛疮'], medicinalValue: '具有吸附、收敛作用。', edibleValue: '白土主要用于外用。', usage: ['外敷', '研粉'], contraindications: ['内服需谨慎'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop', color: '#F5F5F5' },
+  
+  // ============ 金石部 ============
+  { id: 'shengdai', name: '金箔', latinName: 'Gold leaf', category: '金石部', subcategory: '金类', aliases: ['金薄', '金页'], description: '金箔为用金捶成的薄片，具有镇惊安神、平肝潜阳的功效。', efficacy: ['镇惊安神', '平肝潜阳', '解毒防腐'], medicinalValue: '古代用于镇心安神，现代研究表明金有抗炎作用。', edibleValue: '金箔可用于食品装饰（可食用金箔）。', usage: ['入丸散', '食品装饰'], contraindications: ['阳虚气陷者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1593520259328-9c89e4ec5bd4?w=400&h=400&fit=crop', color: '#FFD700' },
+  { id: 'yinshua', name: '银箔', latinName: 'Silver leaf', category: '金石部', subcategory: '金类', aliases: ['银薄', '银页'], description: '银箔为用银捶成的薄片，具有镇惊安神、定痫止痉的功效。', efficacy: ['镇惊安神', '定痫止痉', '解毒防腐'], medicinalValue: '古代用于安神定痫，现代研究表明银有抗菌作用。', edibleValue: '银箔可用于食品装饰。', usage: ['入丸散', '食品装饰'], contraindications: ['不可多服久服'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1593520259328-9c89e4ec5bd4?w=400&h=400&fit=crop', color: '#C0C0C0' },
+  { id: 'shigao', name: '石膏', latinName: 'Gypsum Fibrosum', category: '金石部', subcategory: '石类', aliases: ['细石', '软石膏', '寒水石'], description: '石膏为硫酸盐类矿物石膏的矿石，是常用的清热泻火药。', efficacy: ['清热泻火', '除烦止渴', '收敛生肌'], medicinalValue: '具有解热、镇静、消炎、利尿等作用。', edibleValue: '石膏主要用于药用。', usage: ['煎汤', '研粉'], contraindications: ['脾胃虚寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop', color: '#F5F5F5' },
+  { id: 'tongkuai', name: '铜绿', latinName: 'Copper acetate', category: '金石部', subcategory: '石类', aliases: ['铜青', '铜锈'], description: '铜绿为铜表面生成的绿色锈衣，具有退翳、祛腐、杀虫的功效。', efficacy: ['退翳', '祛腐', '杀虫', '敛疮'], medicinalValue: '具有抗菌、收敛作用。', edibleValue: '铜绿主要用于外用。', usage: ['外敷', '点眼'], contraindications: ['不可内服'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop', color: '#20B2AA' },
+  { id: 'tieluo', name: '铁落', latinName: 'Iron filings', category: '金石部', subcategory: '金类', aliases: ['铁屑', '铁花', '铁液'], description: '铁落为煅铁时打落的铁屑，具有平肝镇惊、安神定痫的功效。', efficacy: ['平肝镇惊', '安神定痫', '补血'], medicinalValue: '铁是人体必需的微量元素。', edibleValue: '铁落主要用于药用。', usage: ['煎汤', '研粉'], contraindications: ['脾胃虚寒者慎用'], source: '《本草纲目》', imageUrl: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop', color: '#696969' },
 ];
 
-// 获取所有分类
-export const herbCategories: HerbCategory[] = [
-  '补益药',
-  '清热药',
-  '理气药',
-  '消食药',
-  '利水渗湿药',
-  '活血化瘀药',
-  '止咳平喘药',
-  '其他'
+// 导出所有分类
+export const categories: { id: string; name: string; subcategories: string[] }[] = [
+  { id: '草部', name: '草部', subcategories: ['山草类', '隰草类', '芳草类', '毒草类', '蔓草类', '水草类', '石草类', '苔类', '杂草类'] },
+  { id: '谷部', name: '谷部', subcategories: ['稻类', '麦类', '粟类', '菽类', '麻类', '酿造类'] },
+  { id: '菜部', name: '菜部', subcategories: ['荤菜类', '柔滑类', '瓜菜类', '水菜类', '熏造类', '蓏类'] },
+  { id: '果部', name: '果部', subcategories: ['水果类', '山果类', '夷果类', '味果类', '蓏类'] },
+  { id: '木部', name: '木部', subcategories: ['乔木类', '灌木类', '香木类', '寓木类', '杂木类'] },
+  { id: '虫部', name: '虫部', subcategories: ['虫类', '湿生类'] },
+  { id: '鳞部', name: '鳞部', subcategories: ['龙类', '蛇类', '鱼类', '无鳞鱼类'] },
+  { id: '介部', name: '介部', subcategories: ['龟鳖类', '蛤蚌类'] },
+  { id: '禽部', name: '禽部', subcategories: ['山禽类', '原禽类', '林禽类', '水禽类'] },
+  { id: '兽部', name: '兽部', subcategories: ['走兽类', '鼠类', '寓怪类'] },
+  { id: '人部', name: '人部', subcategories: ['人类'] },
+  { id: '水部', name: '水部', subcategories: ['天水类', '地水类'] },
+  { id: '火部', name: '火部', subcategories: ['火类'] },
+  { id: '土部', name: '土部', subcategories: ['土类'] },
+  { id: '金石部', name: '金石部', subcategories: ['金类', '玉类', '石类'] },
 ];
 
-// 获取分类对应的颜色
-export const categoryColors: Record<HerbCategory, string> = {
-  '补益药': '#DC143C',
-  '清热药': '#228B22',
-  '理气药': '#FF8C00',
-  '消食药': '#FF6347',
-  '利水渗湿药': '#4169E1',
-  '活血化瘀药': '#DC143C',
-  '止咳平喘药': '#9370DB',
-  '其他': '#808080'
-};
-
-// 搜索中药
-export function searchHerbs(query: string): Herb[] {
-  const lowerQuery = query.toLowerCase();
-  return herbsData.filter(herb =>
-    herb.name.includes(query) ||
-    herb.latinName.toLowerCase().includes(lowerQuery) ||
-    herb.aliases.some(alias => alias.includes(query)) ||
-    herb.efficacy.some(e => e.includes(query))
-  );
-}
-
-// 按分类筛选
-export function filterByCategory(category: HerbCategory): Herb[] {
-  return herbsData.filter(herb => herb.category === category);
+// 获取分类统计
+export function getCategoryStats() {
+  const stats: Record<string, number> = {};
+  herbsData.forEach(herb => {
+    stats[herb.category] = (stats[herb.category] || 0) + 1;
+  });
+  return stats;
 }

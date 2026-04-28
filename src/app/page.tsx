@@ -1,363 +1,428 @@
 'use client';
 
-import { useState } from 'react';
-import { herbsData, herbCategories, type Herb, type HerbCategory } from '@/data/herbs';
-import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
-import { Card, CardContent } from '@/components/ui/card';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { cn } from '@/lib/utils';
-import {
-  Search,
-  Leaf,
-  Heart,
-  Brain,
-  Shield,
-  Activity,
-  Droplets,
-  Sparkles
-} from 'lucide-react';
+import { useState, useMemo, useCallback } from 'react';
+import { Search, X, Leaf, BookOpen, Filter, ChevronDown } from 'lucide-react';
+import { herbsData, categories, type Herb, type HerbCategory } from '@/data/herbs';
 
-// 中药图片URL映射（使用与药材匹配的公开图片）
-const herbImages: Record<string, string> = {
-  // 补益药
-  dangshen: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400&h=400&fit=crop', // 党参
-  huangqi: 'https://images.unsplash.com/photo-1611241893603-3c359704e0ee?w=400&h=400&fit=crop', // 黄芪
-  gouqi: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', // 枸杞
-  baizhu: 'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=400&h=400&fit=crop', // 白术
-  baishao: 'https://images.unsplash.com/photo-1557844352-761f2565b576?w=400&h=400&fit=crop', // 白芍
-  gancao: 'https://images.unsplash.com/photo-1543362906-acfc16c67564?w=400&h=400&fit=crop', // 甘草
-  dazao: 'https://images.unsplash.com/photo-1567306301408-9b74779a11af?w=400&h=400&fit=crop', // 大枣
-  hongzao: 'https://images.unsplash.com/photo-1531346878377-a5be20888e57?w=400&h=400&fit=crop', // 黑枣
-  maidong: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=400&h=400&fit=crop', // 麦冬
-  heshouwu: 'https://images.unsplash.com/photo-1558591710-4b4a1ae0f04d?w=400&h=400&fit=crop', // 何首乌
-  xiyangshen: 'https://images.unsplash.com/photo-1567331711402-509c12c41959?w=400&h=400&fit=crop', // 西洋参
-  lianzi: 'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=400&h=400&fit=crop', // 莲子
-  
-  // 清热药
-  bohe: 'https://images.unsplash.com/photo-1515696955266-4f67e13219e8?w=400&h=400&fit=crop', // 薄荷
-  jinyinhua: 'https://images.unsplash.com/photo-1528825871115-3581a5387919?w=400&h=400&fit=crop', // 金银花
-  juemingzi: 'https://images.unsplash.com/photo-1551754655-cd27e38d2076?w=400&h=400&fit=crop', // 决明子
-  
-  // 理气药
-  chenpi: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&h=400&fit=crop', // 陈皮
-  
-  // 消食药
-  shanzha: 'https://images.unsplash.com/photo-1528821128474-27f963b062bf?w=400&h=400&fit=crop', // 山楂
-  
-  // 利水渗湿药
-  fuling: 'https://images.unsplash.com/photo-1543362906-acfc16c67564?w=400&h=400&fit=crop', // 茯苓
-  yiyiren: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop', // 薏米
-  
-  // 活血化瘀药
-  honghua: 'https://images.unsplash.com/photo-1490750967868-88aa4486c946?w=400&h=400&fit=crop', // 红花
-  
-  // 止咳平喘药
-  baiguo: 'https://images.unsplash.com/photo-1506917728037-b6af01a7d403?w=400&h=400&fit=crop', // 白果
-  kuxingren: 'https://images.unsplash.com/photo-1585664811087-47f65abbad64?w=400&h=400&fit=crop', // 杏仁
-  
-  // 其他
-  shanyao: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400&h=400&fit=crop', // 山药
-  shengjiang: 'https://images.unsplash.com/photo-1508615039623-a25605d2b022?w=400&h=400&fit=crop', // 生姜
-};
+// 虚拟滚动配置
+const CARD_HEIGHT = 380;
+const CARD_MARGIN = 16;
+const VISIBLE_BUFFER = 3;
 
-// 分类图标映射
-const categoryIcons: Record<HerbCategory, typeof Leaf> = {
-  '补益药': Heart,
-  '清热药': Brain,
-  '理气药': Sparkles,
-  '消食药': Activity,
-  '利水渗湿药': Droplets,
-  '活血化瘀药': Heart,
-  '止咳平喘药': Brain,
-  '其他': Shield
-};
-
-// 分类颜色
-const categoryColors: Record<HerbCategory, string> = {
-  '补益药': 'bg-red-100 text-red-800 border-red-200',
-  '清热药': 'bg-green-100 text-green-800 border-green-200',
-  '理气药': 'bg-orange-100 text-orange-800 border-orange-200',
-  '消食药': 'bg-amber-100 text-amber-800 border-amber-200',
-  '利水渗湿药': 'bg-blue-100 text-blue-800 border-blue-200',
-  '活血化瘀药': 'bg-pink-100 text-pink-800 border-pink-200',
-  '止咳平喘药': 'bg-purple-100 text-purple-800 border-purple-200',
-  '其他': 'bg-gray-100 text-gray-800 border-gray-200'
-};
-
-// 中药卡片组件
-function HerbCard({ herb, onClick }: { herb: Herb; onClick: () => void }) {
-  const Icon = categoryIcons[herb.category];
-  const imageUrl = herbImages[herb.id] || `https://images.unsplash.com/photo-1515586000433-45406d8e6662?w=400&h=400&fit=crop`;
-
-  return (
-    <Card
-      className="group cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1 border-2 hover:border-emerald-200 overflow-hidden"
-      onClick={onClick}
-    >
-      <div className="relative h-48 overflow-hidden bg-gradient-to-br from-emerald-50 to-teal-50">
-        <img
-          src={imageUrl}
-          alt={herb.name}
-          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.src = 'https://images.unsplash.com/photo-1515586000433-45406d8e6662?w=400&h=400&fit=crop';
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-        <Badge
-          className={cn('absolute top-3 right-3', categoryColors[herb.category])}
-          variant="outline"
-        >
-          <Icon className="w-3 h-3 mr-1" />
-          {herb.category}
-        </Badge>
-        <div className="absolute bottom-3 left-3 text-white">
-          <h3 className="text-xl font-bold text-shadow">{herb.name}</h3>
-          <p className="text-sm opacity-90 italic">{herb.latinName}</p>
-        </div>
-      </div>
-      <CardContent className="p-4">
-        <p className="text-sm text-gray-600 line-clamp-2 mb-3">{herb.description}</p>
-        <div className="flex flex-wrap gap-1">
-          {herb.efficacy.slice(0, 3).map((eff, idx) => (
-            <Badge key={idx} variant="secondary" className="text-xs bg-emerald-50 text-emerald-700">
-              {eff}
-            </Badge>
-          ))}
-          {herb.efficacy.length > 3 && (
-            <Badge variant="secondary" className="text-xs bg-gray-50 text-gray-600">
-              +{herb.efficacy.length - 3}
-            </Badge>
-          )}
-        </div>
-      </CardContent>
-    </Card>
-  );
-}
-
-// 中药详情模态框
-function HerbDetailModal({ herb, onClose }: { herb: Herb; onClose: () => void }) {
-  const imageUrl = herbImages[herb.id] || `https://images.unsplash.com/photo-1515586000433-45406d8e6662?w=400&h=400&fit=crop`;
-
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={onClose}>
-      <div
-        className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-y-auto"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="relative h-64 md:h-80">
-          <img src={imageUrl} alt={herb.name} className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 w-10 h-10 rounded-full bg-white/90 flex items-center justify-center text-gray-800 hover:bg-white transition-colors"
-          >
-            ✕
-          </button>
-          <div className="absolute bottom-6 left-6 text-white">
-            <Badge className={cn('mb-2', categoryColors[herb.category])} variant="outline">
-              {herb.category}
-            </Badge>
-            <h2 className="text-3xl font-bold mb-1">{herb.name}</h2>
-            <p className="text-lg italic opacity-90">{herb.latinName}</p>
-            {herb.aliases.length > 0 && (
-              <p className="text-sm opacity-80 mt-1">别名：{herb.aliases.join('、')}</p>
-            )}
-          </div>
-        </div>
-
-        <div className="p-6 space-y-6">
-          {/* 简介 */}
-          <section>
-            <h3 className="text-lg font-semibold text-emerald-800 mb-2 flex items-center">
-              <Leaf className="w-5 h-5 mr-2" />
-              简介
-            </h3>
-            <p className="text-gray-700 leading-relaxed">{herb.description}</p>
-          </section>
-
-          {/* 功效 */}
-          <section>
-            <h3 className="text-lg font-semibold text-emerald-800 mb-3 flex items-center">
-              <Sparkles className="w-5 h-5 mr-2" />
-              主要功效
-            </h3>
-            <div className="flex flex-wrap gap-2">
-              {herb.efficacy.map((eff, idx) => (
-                <Badge key={idx} className="bg-emerald-100 text-emerald-800 border-emerald-200 px-3 py-1">
-                  {eff}
-                </Badge>
-              ))}
-            </div>
-          </section>
-
-          {/* 药用价值 */}
-          <section className="bg-amber-50 rounded-xl p-4 border border-amber-100">
-            <h3 className="text-lg font-semibold text-amber-800 mb-2 flex items-center">
-              <Heart className="w-5 h-5 mr-2" />
-              药用价值
-            </h3>
-            <p className="text-gray-700 leading-relaxed">{herb.medicinalValue}</p>
-          </section>
-
-          {/* 食用价值 */}
-          <section className="bg-green-50 rounded-xl p-4 border border-green-100">
-            <h3 className="text-lg font-semibold text-green-800 mb-2 flex items-center">
-              <Activity className="w-5 h-5 mr-2" />
-              食用价值
-            </h3>
-            <p className="text-gray-700 leading-relaxed">{herb.edibleValue}</p>
-          </section>
-
-          {/* 服用方法 */}
-          <section>
-            <h3 className="text-lg font-semibold text-emerald-800 mb-2">服用方法</h3>
-            <div className="flex flex-wrap gap-2">
-              {herb.usage.map((use, idx) => (
-                <Badge key={idx} variant="outline" className="border-emerald-300 text-emerald-700">
-                  {use}
-                </Badge>
-              ))}
-            </div>
-          </section>
-
-          {/* 禁忌 */}
-          {herb.contraindications.length > 0 && (
-            <section className="bg-red-50 rounded-xl p-4 border border-red-100">
-              <h3 className="text-lg font-semibold text-red-800 mb-2">注意事项</h3>
-              <ul className="space-y-1">
-                {herb.contraindications.map((item, idx) => (
-                  <li key={idx} className="text-gray-700 flex items-start">
-                    <span className="text-red-500 mr-2">•</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export default function HerbsPage() {
+export default function HomePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<HerbCategory | '全部'>('全部');
   const [selectedHerb, setSelectedHerb] = useState<Herb | null>(null);
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['全部']));
+  const [visibleRange, setVisibleRange] = useState({ start: 0, end: 20 });
 
-  // 过滤中药
-  const filteredHerbs = herbsData.filter((herb) => {
-    const matchesSearch =
-      searchQuery === '' ||
-      herb.name.includes(searchQuery) ||
-      herb.latinName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      herb.aliases.some(alias => alias.includes(searchQuery)) ||
-      herb.efficacy.some(e => e.includes(searchQuery));
+  // 过滤药材
+  const filteredHerbs = useMemo(() => {
+    let result = herbsData;
+    
+    if (selectedCategory !== '全部') {
+      result = result.filter(herb => herb.category === selectedCategory);
+    }
+    
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(herb => 
+        herb.name.toLowerCase().includes(query) ||
+        herb.latinName.toLowerCase().includes(query) ||
+        herb.aliases.some(alias => alias.toLowerCase().includes(query)) ||
+        herb.efficacy.some(eff => eff.toLowerCase().includes(query))
+      );
+    }
+    
+    return result;
+  }, [selectedCategory, searchQuery]);
 
-    const matchesCategory = selectedCategory === '全部' || herb.category === selectedCategory;
+  // 切换分类展开/收起
+  const toggleCategory = useCallback((category: string) => {
+    setExpandedCategories(prev => {
+      const next = new Set(prev);
+      if (next.has(category)) {
+        next.delete(category);
+      } else {
+        next.add(category);
+      }
+      return next;
+    });
+  }, []);
 
-    return matchesSearch && matchesCategory;
-  });
+  // 滚动处理（虚拟滚动优化）
+  const handleScroll = useCallback((e: React.UIEvent<HTMLDivElement>) => {
+    const container = e.currentTarget;
+    const scrollTop = container.scrollTop;
+    const containerHeight = container.clientHeight;
+    
+    const start = Math.max(0, Math.floor(scrollTop / (CARD_HEIGHT + CARD_MARGIN)) - VISIBLE_BUFFER);
+    const end = Math.min(
+      filteredHerbs.length,
+      Math.ceil((scrollTop + containerHeight) / (CARD_HEIGHT + CARD_MARGIN)) + VISIBLE_BUFFER
+    );
+    
+    setVisibleRange({ start, end });
+  }, [filteredHerbs.length]);
+
+  // 按分类分组显示
+  const groupedHerbs = useMemo(() => {
+    const groups: Record<string, Herb[]> = {};
+    
+    if (selectedCategory === '全部') {
+      categories.forEach(cat => {
+        const herbs = filteredHerbs.filter(h => h.category === cat.name);
+        if (herbs.length > 0) {
+          groups[cat.name] = herbs;
+        }
+      });
+    } else {
+      const category = categories.find(c => c.name === selectedCategory);
+      if (category) {
+        category.subcategories.forEach(sub => {
+          const herbs = filteredHerbs.filter(h => h.subcategory === sub);
+          if (herbs.length > 0) {
+            groups[sub] = herbs;
+          }
+        });
+      }
+    }
+    
+    return groups;
+  }, [filteredHerbs, selectedCategory]);
+
+  // 渲染药材卡片
+  const renderHerbCard = (herb: Herb, index: number) => {
+    const isVisible = index >= visibleRange.start && index < visibleRange.end;
+    
+    if (!isVisible) {
+      return <div key={herb.id} style={{ height: CARD_HEIGHT + CARD_MARGIN }} />;
+    }
+
+    return (
+      <div
+        key={herb.id}
+        className="group relative bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden border border-stone-100"
+        style={{ height: CARD_HEIGHT }}
+        onClick={() => setSelectedHerb(herb)}
+      >
+        {/* 图片区域 */}
+        <div className="relative h-36 overflow-hidden bg-gradient-to-br from-emerald-50 to-teal-50">
+          {herb.imageUrl ? (
+            <img
+              src={herb.imageUrl}
+              alt={herb.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-emerald-100 to-teal-100">
+              <Leaf className="w-16 h-16 text-emerald-300" />
+            </div>
+          )}
+          {/* 分类标签 */}
+          <div className="absolute top-3 right-3">
+            <span className="px-2 py-1 text-xs font-medium bg-white/90 backdrop-blur-sm text-emerald-700 rounded-full shadow-sm">
+              {herb.subcategory || herb.category}
+            </span>
+          </div>
+        </div>
+
+        {/* 内容区域 */}
+        <div className="p-4 flex flex-col h-[calc(100%-144px)]">
+          {/* 名称 */}
+          <div className="mb-2">
+            <h3 className="text-lg font-semibold text-stone-800 group-hover:text-emerald-700 transition-colors">
+              {herb.name}
+            </h3>
+            <p className="text-xs text-stone-500 italic">{herb.latinName}</p>
+          </div>
+
+          {/* 别名 */}
+          {herb.aliases.length > 0 && (
+            <p className="text-xs text-stone-400 mb-2 truncate">
+              别名：{herb.aliases.slice(0, 2).join('、')}
+              {herb.aliases.length > 2 && '...'}
+            </p>
+          )}
+
+          {/* 功效预览 */}
+          <div className="flex-1 overflow-hidden">
+            <div className="flex flex-wrap gap-1">
+              {herb.efficacy.slice(0, 3).map((eff, i) => (
+                <span
+                  key={i}
+                  className="px-2 py-0.5 text-xs bg-emerald-50 text-emerald-700 rounded-full"
+                >
+                  {eff}
+                </span>
+              ))}
+            </div>
+          </div>
+
+          {/* 来源 */}
+          <p className="text-xs text-stone-400 mt-2 border-t border-stone-100 pt-2">
+            出自《{herb.source.replace('《本草纲目》', '')}》
+          </p>
+        </div>
+      </div>
+    );
+  };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-50 via-white to-teal-50">
+    <div className="min-h-screen bg-gradient-to-br from-stone-50 via-emerald-50 to-teal-50">
       {/* 头部 */}
-      <header className="bg-gradient-to-r from-emerald-700 via-emerald-600 to-teal-600 text-white py-12 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="flex items-center justify-center mb-4">
-            <Leaf className="w-12 h-12 mr-4 animate-pulse" />
-            <h1 className="text-4xl md:text-5xl font-bold">药食同源中药名录</h1>
-            <Leaf className="w-12 h-12 ml-4 animate-pulse" />
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-stone-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg shadow-emerald-200">
+                <BookOpen className="w-6 h-6 text-white" />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold text-stone-800">本草纲目</h1>
+                <p className="text-xs text-stone-500">中药名录数据库 · 共收录 {herbsData.length} 种药材</p>
+              </div>
+            </div>
+            <div className="text-right">
+              <p className="text-2xl font-bold text-emerald-600">{filteredHerbs.length}</p>
+              <p className="text-xs text-stone-500">当前显示</p>
+            </div>
           </div>
-          <p className="text-emerald-100 text-lg max-w-2xl mx-auto">
-            传承千年中医智慧，探索中药的养生奥秘
-          </p>
-          <div className="mt-6 flex justify-center gap-4 text-sm">
-            <Badge className="bg-white/20 text-white border-white/30">
-              共 {herbsData.length} 种药材
-            </Badge>
-            <Badge className="bg-white/20 text-white border-white/30">
-              {herbCategories.length} 大分类
-            </Badge>
+
+          {/* 搜索框 */}
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-stone-400" />
+            <input
+              type="text"
+              placeholder="搜索药材名称、拉丁名、别名或功效..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-12 py-3 bg-stone-100 rounded-xl border-2 border-transparent focus:border-emerald-500 focus:bg-white outline-none transition-all"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-stone-300 hover:bg-stone-400 flex items-center justify-center transition-colors"
+              >
+                <X className="w-4 h-4 text-white" />
+              </button>
+            )}
           </div>
         </div>
       </header>
 
-      {/* 搜索和筛选 */}
-      <div className="sticky top-0 z-40 bg-white/80 backdrop-blur-md shadow-sm py-4 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row gap-4 items-center">
-            <div className="relative flex-1 w-full">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <Input
-                type="text"
-                placeholder="搜索药材名称、功效..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10 h-12 text-lg border-2 border-emerald-200 focus:border-emerald-500 rounded-xl"
-              />
-            </div>
-            <Tabs value={selectedCategory} onValueChange={(v) => setSelectedCategory(v as HerbCategory | '全部')}>
-              <TabsList className="bg-emerald-50 h-auto p-1 rounded-xl flex flex-wrap">
-                <TabsTrigger value="全部" className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white rounded-lg px-3 py-2">
-                  全部
-                </TabsTrigger>
-                {herbCategories.map((cat) => (
-                  <TabsTrigger
-                    key={cat}
-                    value={cat}
-                    className="data-[state=active]:bg-emerald-600 data-[state=active]:text-white rounded-lg px-3 py-2 text-sm"
-                  >
-                    {cat}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
+      {/* 分类标签 */}
+      <div className="sticky top-[132px] z-40 bg-white/90 backdrop-blur-md border-b border-stone-200 shadow-sm">
+        <div className="max-w-7xl mx-auto px-4 py-3">
+          <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
+            <button
+              onClick={() => setSelectedCategory('全部')}
+              className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                selectedCategory === '全部'
+                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-200'
+                  : 'bg-stone-100 text-stone-600 hover:bg-emerald-50 hover:text-emerald-600'
+              }`}
+            >
+              全部药材
+            </button>
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setSelectedCategory(cat.name as HerbCategory)}
+                className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+                  selectedCategory === cat.name
+                    ? 'bg-emerald-600 text-white shadow-md shadow-emerald-200'
+                    : 'bg-stone-100 text-stone-600 hover:bg-emerald-50 hover:text-emerald-600'
+                }`}
+              >
+                {cat.name}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* 中药列表 */}
-      <main className="max-w-7xl mx-auto px-4 py-8">
-        {filteredHerbs.length === 0 ? (
-          <div className="text-center py-16">
-            <Leaf className="w-16 h-16 mx-auto text-gray-300 mb-4" />
-            <p className="text-gray-500 text-lg">未找到匹配的中药材</p>
-            <p className="text-gray-400 text-sm mt-2">尝试调整搜索条件或浏览其他分类</p>
+      {/* 主内容区 */}
+      <main className="max-w-7xl mx-auto px-4 py-6">
+        {selectedCategory === '全部' ? (
+          // 按分类显示
+          <div className="space-y-8">
+            {Object.entries(groupedHerbs).map(([groupName, herbs]) => (
+              <section key={groupName}>
+                <div className="flex items-center justify-between mb-4">
+                  <h2 className="text-lg font-semibold text-stone-800 flex items-center gap-2">
+                    <span className="w-1 h-6 bg-emerald-500 rounded-full" />
+                    {groupName}
+                    <span className="text-sm font-normal text-stone-400">({herbs.length}种)</span>
+                  </h2>
+                  <button
+                    onClick={() => toggleCategory(groupName)}
+                    className="flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700"
+                  >
+                    {expandedCategories.has(groupName) ? '收起' : '展开'}
+                    <ChevronDown className={`w-4 h-4 transition-transform ${expandedCategories.has(groupName) ? 'rotate-180' : ''}`} />
+                  </button>
+                </div>
+                {expandedCategories.has(groupName) && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+                    {herbs.map((herb) => renderHerbCard(herb, herbs.indexOf(herb)))}
+                  </div>
+                )}
+              </section>
+            ))}
           </div>
         ) : (
-          <>
-            <p className="text-gray-500 mb-6">
-              共找到 <span className="font-semibold text-emerald-600">{filteredHerbs.length}</span> 种药材
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {filteredHerbs.map((herb) => (
-                <HerbCard key={herb.id} herb={herb} onClick={() => setSelectedHerb(herb)} />
-              ))}
-            </div>
-          </>
+          // 网格显示
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {filteredHerbs.map((herb, index) => renderHerbCard(herb, index))}
+          </div>
+        )}
+
+        {filteredHerbs.length === 0 && (
+          <div className="text-center py-20">
+            <Leaf className="w-16 h-16 text-stone-300 mx-auto mb-4" />
+            <p className="text-stone-500">未找到匹配的药材</p>
+            <button
+              onClick={() => { setSearchQuery(''); setSelectedCategory('全部'); }}
+              className="mt-4 px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+            >
+              清除筛选
+            </button>
+          </div>
         )}
       </main>
 
-      {/* 页脚 */}
-      <footer className="bg-emerald-900 text-emerald-100 py-8 px-4 mt-12">
-        <div className="max-w-7xl mx-auto text-center">
-          <p className="text-sm opacity-80">
-            温馨提示：中药材使用请遵医嘱，本文仅供参考
-          </p>
-          <p className="text-xs mt-2 opacity-60">
-            © 2024 药食同源中药名录 · 传承中医智慧
-          </p>
-        </div>
-      </footer>
-
       {/* 详情模态框 */}
       {selectedHerb && (
-        <HerbDetailModal herb={selectedHerb} onClose={() => setSelectedHerb(null)} />
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+          onClick={() => setSelectedHerb(null)}
+        >
+          <div
+            className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* 头部图片 */}
+            <div className="relative h-48 bg-gradient-to-br from-emerald-400 to-teal-500">
+              {selectedHerb.imageUrl ? (
+                <img
+                  src={selectedHerb.imageUrl}
+                  alt={selectedHerb.name}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <Leaf className="w-20 h-20 text-white/50" />
+                </div>
+              )}
+              <button
+                onClick={() => setSelectedHerb(null)}
+                className="absolute top-4 right-4 w-8 h-8 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center hover:bg-white/40 transition-colors"
+              >
+                <X className="w-5 h-5 text-white" />
+              </button>
+              <div className="absolute bottom-4 left-4">
+                <span className="px-3 py-1 bg-white/90 backdrop-blur-sm rounded-full text-sm font-medium text-emerald-700">
+                  {selectedHerb.subcategory || selectedHerb.category}
+                </span>
+              </div>
+            </div>
+
+            {/* 内容 */}
+            <div className="p-6">
+              {/* 名称 */}
+              <div className="mb-6">
+                <h2 className="text-2xl font-bold text-stone-800 mb-1">{selectedHerb.name}</h2>
+                <p className="text-stone-500 italic">{selectedHerb.latinName}</p>
+                {selectedHerb.aliases.length > 0 && (
+                  <p className="text-sm text-stone-400 mt-2">
+                    别名：{selectedHerb.aliases.join('、')}
+                  </p>
+                )}
+              </div>
+
+              {/* 简介 */}
+              <div className="mb-6">
+                <h3 className="text-sm font-semibold text-stone-600 mb-2 flex items-center gap-2">
+                  <BookOpen className="w-4 h-4" />
+                  简介
+                </h3>
+                <p className="text-stone-700 leading-relaxed">{selectedHerb.description}</p>
+              </div>
+
+              {/* 功效 */}
+              <div className="mb-6">
+                <h3 className="text-sm font-semibold text-stone-600 mb-2">功效</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedHerb.efficacy.map((eff, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full text-sm"
+                    >
+                      {eff}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* 药用价值 */}
+              <div className="mb-6">
+                <h3 className="text-sm font-semibold text-stone-600 mb-2">药用价值</h3>
+                <p className="text-stone-700 leading-relaxed">{selectedHerb.medicinalValue}</p>
+              </div>
+
+              {/* 食用价值 */}
+              <div className="mb-6">
+                <h3 className="text-sm font-semibold text-stone-600 mb-2">食用价值</h3>
+                <p className="text-stone-700 leading-relaxed">{selectedHerb.edibleValue}</p>
+              </div>
+
+              {/* 服用方法 */}
+              <div className="mb-6">
+                <h3 className="text-sm font-semibold text-stone-600 mb-2">服用方法</h3>
+                <div className="flex flex-wrap gap-2">
+                  {selectedHerb.usage.map((use, i) => (
+                    <span
+                      key={i}
+                      className="px-3 py-1 bg-amber-50 text-amber-700 rounded-full text-sm"
+                    >
+                      {use}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* 禁忌 */}
+              <div className="mb-6">
+                <h3 className="text-sm font-semibold text-stone-600 mb-2">注意事项</h3>
+                <div className="space-y-1">
+                  {selectedHerb.contraindications.map((con, i) => (
+                    <p key={i} className="text-red-600 text-sm flex items-start gap-2">
+                      <span className="w-1.5 h-1.5 rounded-full bg-red-500 mt-1.5 flex-shrink-0" />
+                      {con}
+                    </p>
+                  ))}
+                </div>
+              </div>
+
+              {/* 来源 */}
+              <div className="pt-4 border-t border-stone-200">
+                <p className="text-sm text-stone-500">{selectedHerb.source}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
+
+      <style jsx global>{`
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
     </div>
   );
 }
