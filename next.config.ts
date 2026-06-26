@@ -19,8 +19,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // 将静态资源输出到 out 目录
-  distDir: 'out',
   // 确保 trailing slash 一致，避免 GitHub Pages 子路径资源 404
   trailingSlash: true,
   allowedDevOrigins: ['*.dev.coze.site'],
